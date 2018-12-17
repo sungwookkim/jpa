@@ -4,19 +4,28 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "MEMBER")
+/*
+ * uniqueConstraints는 유니크 제약조건이다. 
+ */
+@Table(name = "MEMBER", uniqueConstraints = {@UniqueConstraint(
+	name = "NAME_AGE_UNIQUE"
+	, columnNames = {"NAME", "AGE"}
+)})
 public class Member {
 	@Id
 	@Column(name = "ID")
 	private String id;
 	
-	@Column(name = "NAME")
+	@Column(name = "NAME", nullable = false, length = 10)
 	private String username;
 
 	private Integer age;
 	
+	public Member() { }
+
 	public String getId() { return this.id; }
 	public void setId(String id) { this.id = id; }
 	
