@@ -49,7 +49,14 @@ public class OrderItem {
 	public void setItem(Item item) { this.item = item; }
 
 	public Order getOrder() { return order; }
-	public void setOrder(Order order) { this.order = order; }
+	public void setOrder(Order order) { 
+		this.order = order;
+		
+		// 무한루프에 빠지지 않도록 체크. 
+		if(!order.getOrderItem().contains(this)) {
+			order.getOrderItem().add(this);
+		}
+	}
 
 	public int getOrderPrice() { return orderPrice; }
 	public void setOrderPrice(int orderPrice) { this.orderPrice = orderPrice; }

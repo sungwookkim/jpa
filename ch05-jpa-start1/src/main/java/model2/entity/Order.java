@@ -69,14 +69,21 @@ public class Order {
 			});
 		
 		this.member = member;
-		member.getOrder().add(this);
+
+		// 무한루프에 빠지지 않도록 체크. 
+		if(!member.getOrder().contains(this)) {
+			member.getOrder().add(this);	
+		}
 	}
 	
 	public List<OrderItem> getOrderItem() { return this.orderItems; }
-	public void setOrderItem(List<OrderItem> orderItems) { this.orderItems = orderItems; }
 	public void addOrderItem(OrderItem orderItem) {
 		orderItems.add(orderItem);
-		orderItem.setOrder(this);
+
+		// 무한루프에 빠지지 않도록 체크.
+		if(orderItem.getOrder() != this) {
+			orderItem.setOrder(this);	
+		}
 	}
 	
 }

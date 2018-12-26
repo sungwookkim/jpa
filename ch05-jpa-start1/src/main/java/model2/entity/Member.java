@@ -58,10 +58,12 @@ public class Member {
 	public void setZipcode(String zipcode) { this.zipcode = zipcode; }
 	
 	public List<Order> getOrder() { return this.orders; }
-	public void setOrder(List<Order> orders) { this.orders = orders; }
 	public void addOrder(Order order) {
-		this.orders.add(order); 
-		order.setMember(this);
+		this.orders.add(order);
+		
+		if(order.getMember() != this) {
+			order.setMember(this);
+		}
 	}
 	
 }
