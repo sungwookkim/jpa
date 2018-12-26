@@ -47,33 +47,19 @@ public class ManyToOneMain {
 		new Logic()
 			.logic((em, tx) -> {
 				System.out.println("=============== 팀, 회원 저장 ===============");
-				tx.begin();
+				tx.begin();			
 				
-				teamList.stream().forEach(t -> em.persist(t));					
+				memberList.get(0).setTeam(teamList.get(0));
+				memberList.get(1).setTeam(teamList.get(1));
+				
+				teamList.get(2).addMember(memberList.get(2));
+				teamList.get(2).addMember(memberList.get(3));
+				
+				teamList.stream().forEach(t -> em.persist(t));
 				memberList.stream().forEach(m -> em.persist(m));
-				
+
 				tx.commit();
 				System.out.println("=============================================");
-			})
-			.start();
-		
-		new Logic(JPA_AUTO.UPDATE)
-			.logic((em, tx) -> {
-				System.out.println("=============== 회원과 팀 설정 ===============");
-				tx.begin();
-				
-				Member member1 = em.merge(memberList.get(0));
-				member1.setTeam(teamList.get(0));							
-
-				Member member2 = em.merge(memberList.get(1));
-				member2.setTeam(teamList.get(1));
-				
-				Team team3 = em.merge(teamList.get(2));
-				team3.addMember(em.merge(memberList.get(2)) );
-				team3.addMember(em.merge(memberList.get(3)) );
-				
-				tx.commit();
-				System.out.println("==============================================");
 			})
 			.start();
 

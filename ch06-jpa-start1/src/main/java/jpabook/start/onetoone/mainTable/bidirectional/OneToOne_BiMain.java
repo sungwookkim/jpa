@@ -11,6 +11,11 @@ import jpabook.start.onetoone.mainTable.bidirectional.entity.Member;
 
 public class OneToOne_BiMain {
 
+	/*
+	 * 일대일[1:1]
+	 * 
+	 * 주 테이블에 외래 키 양방향
+	 */
 	public static void main(String[] args) {
 		List<Member> memberList = Arrays.asList(
 			new Member("sinnake1")
@@ -42,7 +47,7 @@ public class OneToOne_BiMain {
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
-			.logic(em -> {
+			.commitAfter(em -> {
 				System.out.println("=============== sinnake1 회원의 사물함 조회 ===============");
 				
 				Member member = Optional.ofNullable(em.createQuery("select m from CH06_ONE_TO_ONE_MAIN_BI_MEMBER m where m.userId = 'sinnake1'", Member.class)

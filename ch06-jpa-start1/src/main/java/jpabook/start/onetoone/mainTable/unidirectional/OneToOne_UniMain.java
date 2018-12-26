@@ -11,6 +11,11 @@ import jpabook.start.onetoone.mainTable.unidirectional.entity.Member;
 
 public class OneToOne_UniMain {
 
+	/*
+	 * 일대일[1:1]
+	 * 
+	 * 주 테이블에 외래 키 단방향
+	 */
 	public static void main(String[] args) {
 		List<Member> memberList = Arrays.asList(
 			new Member("sinnake1")
