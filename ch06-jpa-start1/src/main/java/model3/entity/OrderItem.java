@@ -1,4 +1,4 @@
-package model2.entity;
+package model3.entity;
 
 import java.util.Optional;
 
@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-@Entity(name = "CH05_MODEL2_ORDER_ITEM")
+@Entity(name = "CH06_MODEL3_ORDER_ITEM")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class OrderItem {
 	
@@ -32,8 +32,8 @@ public class OrderItem {
 	private int count;
 	
 	public OrderItem() { }
-	public OrderItem(Item item, int orderPrice, int count) {
-		this.item = item;
+
+	public OrderItem(int orderPrice, int count) {
 		this.orderPrice = orderPrice;
 		this.count = count;
 	}
@@ -51,7 +51,7 @@ public class OrderItem {
 	public void setItem(Item item) { this.item = item; }
 
 	public Order getOrder() { return order; }
-	public void setOrder(Order order) {
+	public void setOrder(Order order) {		
 		Optional.ofNullable(this.order)
 			.ifPresent(o -> o.getOrderItem().remove(this));
 

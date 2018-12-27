@@ -1,7 +1,5 @@
 package jpabook.start.manytomany.connectEntity.entity;
 
-import java.util.Optional;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -39,13 +37,12 @@ public class MemberProduct {
 	
 	public Member getMember() { return this.member; }
 	public void setMember(Member member) {
-		Optional.ofNullable(this.member)
-			.ifPresent(m -> {
-				member.getMemberProduct().remove(this);
-			});
-		
+
 		this.member = member;
-		member.getMemberProduct().add(this);
+
+		if(!member.getMemberProduct().contains(this)) {
+			member.getMemberProduct().add(this);	
+		}
 	}
 
 	public Product getProduct() { return this.product; }
