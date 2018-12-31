@@ -144,6 +144,7 @@ public class Model3Main {
 				Optional.ofNullable(order)
 					.filter(o -> o.size() > 0)
 					.ifPresent(orders -> {
+						
 						orders.stream().forEach(o -> {
 							Optional.ofNullable(o.getDelivery())
 								.ifPresent(delivery -> {
