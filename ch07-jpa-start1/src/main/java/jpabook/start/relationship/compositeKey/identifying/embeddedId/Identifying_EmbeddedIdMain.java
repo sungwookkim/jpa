@@ -29,7 +29,7 @@ public class Identifying_EmbeddedIdMain {
 				
 				Parent parent = new Parent("sinnake_parent_id", "sinnake_parent_name");
 				Child child = new Child(parent, childId, "sinnake_child_name");
-				GrandChild grandChild = new GrandChild(grandChildId, child, "sinnake_grandChild_name");
+				GrandChild grandChild = new GrandChild(child, grandChildId, "sinnake_grandChild_name");
 				
 				em.persist(parent);
 				em.persist(child);

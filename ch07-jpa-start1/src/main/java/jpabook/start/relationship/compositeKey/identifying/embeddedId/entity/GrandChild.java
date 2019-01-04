@@ -25,9 +25,9 @@ public class GrandChild {
 	
 	public GrandChild() { }
 	
-	public GrandChild(GrandChildId grandChildId, Child child, String name) {
-		this.grandChildId = grandChildId;
+	public GrandChild(Child child, GrandChildId grandChildId, String name) {
 		this.childId = child;
+		this.grandChildId = grandChildId;
 		this.name = name;
 	}
 
