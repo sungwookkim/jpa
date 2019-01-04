@@ -28,7 +28,7 @@ public class Identifying_EmbeddedIdMain {
 				tx.begin();
 				
 				Parent parent = new Parent("sinnake_parent_id", "sinnake_parent_name");
-				Child child = new Child(parent, new ChildId(1L, "sinnake_child_id"), "sinnake_child_name");
+				Child child = new Child(parent, childId, "sinnake_child_name");
 				GrandChild grandChild = new GrandChild(grandChildId, child, "sinnake_grandChild_name");
 				
 				em.persist(parent);
