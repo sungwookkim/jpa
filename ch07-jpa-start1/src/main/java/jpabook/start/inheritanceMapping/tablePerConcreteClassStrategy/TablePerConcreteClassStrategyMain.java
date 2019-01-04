@@ -14,7 +14,7 @@ public class TablePerConcreteClassStrategyMain {
 	/*
 	 * 구현 클래스마다 테이블 전략
 	 * 
-	 * 그현 클래스마다 테이블 전략(Table-per--Concrete-Class Strategy)은 자식 엔티티마다 테이블을 만든다.
+	 * 그현 클래스마다 테이블 전략(Table-per-Concrete-Class Strategy)은 자식 엔티티마다 테이블을 만든다.
 	 * 그리고 테이블 각각에 필요한 컬럼이 모두 있다.
 	 * 이 전략은 자식 엔티티마다 테이블을 만든다. 일반적으로 추천하지 않는 전략이다.
 	 * 
