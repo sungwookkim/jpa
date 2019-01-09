@@ -114,6 +114,8 @@
 	    <module>ch05-jpa-start1</module>
 	    <module>ch06-jpa-start1</module>
     <module>ch07-jpa-start1</module>
+    <module>ch08-jpa-start1</module>
+    <module>ch09-jpa-start1</module>
   </modules>
   
 </project>

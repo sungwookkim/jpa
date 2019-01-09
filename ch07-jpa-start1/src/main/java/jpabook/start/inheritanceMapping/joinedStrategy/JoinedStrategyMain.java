@@ -30,7 +30,7 @@ public class JoinedStrategyMain {
 	 * - 데이터를 등록할 INSERT SQL을 두 번 실행한다. 
 	 * 
 	 * 특징
-	 * JPA 표준 명세는 구분 컬럼을 사용하도록 하지만 하이버네이트를 포함한 몇 구현체ㅔ는 구분 컬럼(@DiscrimintorColumn)없이도 동작한다.
+	 * JPA 표준 명세는 구분 컬럼을 사용하도록 하지만 하이버네이트를 포함한 몇 구현체는 구분 컬럼(@DiscrimintorColumn)없이도 동작한다.
 	 *  
 	 * 관련 어노테이션
 	 * @PrimaartKeyJoinColumn, @DiscriminatorColumn, @DiscriminatorValue

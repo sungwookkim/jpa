@@ -1,0 +1,32 @@
+로딩 실행 SQL에서 외래 키에서 NULL 값을 허용하면 JPA가 내부 조인(INNER JOIN)이 아닌 외부 조인(LEFT OUTER JOIN)을 사용한다.
+회원과 팀에서 비유 하자면 팀에 소속되지 않은 회원이 있을 가능성이 있다. 팀에 소속하지 않는 회원과 팀을 내부 조인하면
+팀은 물론이고 회원 데이터도 조회할 수 없다.
+
+JPA는 이런 상황을 고려해서 외부 조인을 사용한다. 하지만 외부 조인보다 내부 조인이 성능과 최적화에서 더 유리하다.
+외래 키에 NOT NULL 제약 조건을 설정하면 값이 있는 것을 보장한다. 따라서 이때는 내부 조인만 사용해도 된다.
+
+JPA에게도 이런 사실을 알려줘야 한다. 다음 코드처럼 @JoinColumn에 nullable = false을 설정해서 이 외래 키는 NULL 값을
+허용하지 않는다고 알려주면 JPA는 외부 조인 대신 내부 조인을 사용한다.
+
+@Entity
+public class Member {
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "TEAM_ID", nullable = false)
+	private Team team;
+	// ...
+}
+
+nullable 설정에 따른 조인 전략
+- @JoinColumn(nullable = true) : NULL 허용(기본 값), 외부 조인 사용
+- @JoinColumn(nullable = false) : NULL 허용하지 않음, 내부 조인 사용
+
+또는 @ManyToMany.optional = false로 설쟁해도 내부 조인을 사용한다.
+
+@Entity
+public class Member {
+	@ManyToMany(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "TEAM_ID")
+	private Team team;
+	// ...
+}
+
