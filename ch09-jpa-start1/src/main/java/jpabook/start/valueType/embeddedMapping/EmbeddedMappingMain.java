@@ -20,11 +20,14 @@ public class EmbeddedMappingMain {
 				
 				ZipCode zipCode = new ZipCode("sinnake zip", "sinnake plusFour");
 				Address address = new Address("sinnake street", "sinnake city", "sinnake state", zipCode);
+
+				ZipCode companyZipCode = new ZipCode("sinnake companyZip", "sinnake companyPlusFour");
+				Address companyAddress = new Address("sinnake companyStreet", "sinnake companyCity", "sinnake companyState", companyZipCode);
 				
 				PhoneServiceProvider phoneServiceProvider = new PhoneServiceProvider("sinnake phoneServiceProvider");
 				PhoneNumber phoneNumber = new PhoneNumber("sinnake areaCode", "sinnake localNumber", phoneServiceProvider);
-				
-				Member member = new Member(address, phoneNumber);
+
+				Member member = new Member(address, companyAddress, phoneNumber);
 				
 				em.persist(member);
 				
@@ -50,6 +53,17 @@ public class EmbeddedMappingMain {
 				System.out.println(String.format("zipCodePlusFour : %s, zipCodeZip : %s"
 					, Optional.ofNullable(zipCode.getPlusFour()).orElse("")
 					, Optional.ofNullable(zipCode.getZip()).orElse("") ));
+
+				Address companyAddress = Optional.ofNullable(member.getCompanyAddres()).orElseGet(Address::new);
+				System.out.println(String.format("companyAddressCity : %s, companyAddressState : %s, companyAddressStreet : %s"
+					, Optional.ofNullable(companyAddress.getCity()).orElse("")
+					, Optional.ofNullable(companyAddress.getState()).orElse("")
+					, Optional.ofNullable(companyAddress.getStreet()).orElse("") ));
+				
+				ZipCode companyZipCode = Optional.ofNullable(companyAddress.getZipCode()).orElseGet(ZipCode::new);
+				System.out.println(String.format("companyZipCodePlusFour : %s, companyZipCodeZip : %s"
+					, Optional.ofNullable(companyZipCode.getPlusFour()).orElse("")
+					, Optional.ofNullable(companyZipCode.getZip()).orElse("") ));
 				
 				PhoneNumber phoneNumber = Optional.ofNullable(member.getPhoneNumber()).orElseGet(PhoneNumber::new);
 				System.out.println(String.format("phoneNumberAreaCode : %s, phoneNumberLocalNumber : %s"
