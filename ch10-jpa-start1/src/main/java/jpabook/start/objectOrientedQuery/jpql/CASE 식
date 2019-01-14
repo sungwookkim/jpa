@@ -1,0 +1,63 @@
+CASE 식
+	특정 조건에 따라 분기할 때 CASE 식을 사용한다. CASE 식은 4가지 종류가 있다.
+		ㅁ 기본 CASE
+		ㅁ 심플 CASE
+		ㅁ COALESCE
+		ㅁ NULLIF
+	
+		기본 CASE
+			문법 : 
+				CASE
+					{WHEN <조건식> THEN <스칼라식>} +
+					ELSE <스칼라식>
+				END
+				
+				예)
+					select
+						case when m.age <= 10 then '학생요금'
+							when m.age >= 60 then '경로요금'
+						end
+					from Member m
+		심플 CASE
+			심플 CASE는 조건식을 사용할 수 없지만, 문법이 단순하다. 참고로 자바의 switch case문과 비슷하다.
+			문법 :
+				CASE <조건대상>
+					{WHEN <스칼라식1> THEN <스칼라식2>} +
+					ELSE <스칼라식>
+				END
+				
+				예)
+					select
+						case t.name
+							when '팀A' then '인센티브100%'
+							when '팀B' then '인센티브200%'
+							else '인센티브105%'
+						end
+					from Team t
+		
+		참고
+			표준 명세의 문법 정의는 다음과 같다.
+			ㅁ 기본 CASE 식::=
+				CASE when_절 {when_절} * ELSE 스칼라식 END
+				when_절::= WHEN 조건식 THEN 스칼라식
+			ㅁ 심플 CASE 식::=
+				CASE case_피연산자 심플_when_절 {심플_when_절}* ELSE 스칼라식 END
+				case_피연산자::= 상태 필드 경로식 | 타입 구분자
+				심플_when_절::= WHEN 스칼라식 THEN 스칼라식
+				
+		COLESCE
+			문법 : 
+				COALESCE(<스칼라식> {, <스칼라식>}+)
+			설명 : 
+				스칼라식을 차례대로 조회해서 null이 아니면 반환한다.
+			예) m.username이 null이면 '이름 없는 회원'을 반환한다
+			select coalesce(m.username, '이름 없는 회원') from Member m
+			
+		NULLIF
+			문법 : 
+				NULLIF(<스칼라식>, <스칼라식>)
+			설명 : 
+				두 값이 같으면 null을 반환하고 다르면 첫 번째 값을 반환한다.
+				집합 함수는 null을 포함하지 않으므로 보통 집합 함수와 함께 사용한다.
+			예) 사용자 이름이 '관리자'면 null을 반환하고 나머지는 본인의 이름을 반환한다.
+			select NULLIF(m.username, '관리자') from Member m

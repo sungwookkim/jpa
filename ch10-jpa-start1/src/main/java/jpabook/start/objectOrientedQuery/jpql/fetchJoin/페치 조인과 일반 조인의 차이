@@ -1,0 +1,31 @@
+예) 내부 조인
+	select t
+	from Team t join t.member m
+	where t.name = '우리반'
+
+예) 실행된 SQL
+	SELECT
+		T.*
+	FROM TEAM T
+	INNER JOIN MEMBER M ON T.ID = M.TEAM_ID
+	WHERE T.NAME = 우리반'
+
+위 예제 처럼 JPQL에서 팀과 회원 컬렉션을 조인했으므로 회원 컬렉션도 함께 조회할 것으로 기대해선 안된다.
+실행된 SQL의 SELECT 절을 보면 팀만 조회하고 조인했던 회원은 조회하지 않는다.
+
+"JQPL은 결과를 반환할 때 연관관계까지 고려하지 않는다. 단지 SELECT 절에 지정한 엔티티만 조회할 뿐이다"
+따라서 팀 엔티티만 조회하고 연관된 회원 컬렉션은 조회하지 않는다.
+만약 회원 컬렉션을 지연 로딩으로 설정하면 프록시나 아직 초기화하지 않은 컬렉션 랩퍼를 반환한다.
+즉시 로딩으로 설정하면 회원 컬렉션을 즉시 로딩하기 위해 쿼리를 한 번 더 실행한다.
+
+반면에 페치 조인을 사용하면 연관된 엔티티도 함께 조회한다.
+예) 페치 조인
+	select t
+	from Team t join fetch t.member
+	where t.name = '우리반'
+
+예) 실행된 SQL
+	SELECT T.*, M.*
+	FROM TEAM T
+	INNER JOIN MEMBER M ON T.ID = M.TEAM_ID
+	WHERE T.NAME = '우리반'

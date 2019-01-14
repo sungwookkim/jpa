@@ -1,0 +1,21 @@
+Between, IN, Like, NULL 비교
+	ㅁ Between 식
+		문법 : X [NOT] BETWEEN A AND B
+		설명 : X는 A ~ B 사이의 값이면 참(A, B 포함)
+		예) 나이가 10 ~ 20인 회원을 찾아라
+			select m from Member m
+			where m.age between 10 and 20
+	ㅁ IN 식
+		문법 : X [NOT] IN(예제)
+		설명 : X와 같은 같이 예제에 하나라도 있으면 참이다. IN 식의 예제에서는 서브쿼리를 사용할 수 있다.
+		예) 이름이 회원1이나 회원2인 회원을 찾아라.
+		select m from Member m
+		where m.userName in ('회원1', '회원2')
+		
+	NULL 비교식
+		문법 : {단일값 경로 | 입력 파라미터} IS [NOT] NULL
+		설명 : NULL인지 비교한다. NULL은 =으로 비교하면 안 되고 꼭 IS NULL을 사용해야 한다.
+		예) 
+			where m.userName is null
+			where null = null // 거짓
+			where 1 = 1 // 참

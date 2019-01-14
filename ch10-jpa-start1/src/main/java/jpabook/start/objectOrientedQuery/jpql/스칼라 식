@@ -1,0 +1,103 @@
+스칼라 식
+	스칼라는 숫자, 문자, 날짜, case, 엔티티 타입(엔티티의 타입 정보) 같은 가장 기본적인 타입들을 말한다.
+	스칼라 타입에 사용하는 식을 알아보자.
+
+	수학 식
+		ㅁ +, - : 단항 연산자
+		ㅁ *, /, +, - : 사칙연산
+
+	문자함수
+		함수
+			CONCAT(문자1, 문자2, ... )
+				설명 : 
+					문자를 합한다.
+				예제 : 
+					CONCAT('A', 'B') = AB
+			SUBSTRING(문자, 위치, [길이])
+				설명 : 
+					위치부터 시작해 길이만큼 문자를 구한다.
+					길이 값이 없으면 나머지 전체 길이를 뜻한다.
+				예제 : 
+					SUBSTRING('ABCDEF', 2, 3) = BCD
+			TRIM([[LEADING | TRAILING | BOTH] [트림문자] FROM] 문자)
+				설명 :
+					LEADING = 왼쪽만
+					TRAILING = 오른쪽만
+					BOTH = 양쪽 다 트림 문자를 제거한다.
+					기본값은 BOTH. 트림 문자의 기본값은 공백(SPACE)다.
+				예제 :
+					TRIM(' ABC ') = 'ABC'
+			LOWER(문자)
+				설명 :
+					소문자로 변경
+				예제 :
+					LOWER('ABC') = 'abc'
+			UPPER(문자)
+				설명 : 
+					대문자로 변경
+				예제 : 
+					UPPER('abc') = 'ABC'
+			LENGTH(문자)
+				셜명 : 
+					문자 길이
+				예제 : 
+					LENGTH('ABC') = 3
+			LOCATE(찾을 문자, 원본 문자, [검색시작위치])
+				설명 : 
+					검색위치부터 문자를 검색한다.
+					1부터 시작, 못 찾으면 0 반환
+				예제 : 
+					LOCATE('DE', 'ABCDEFG') = 4
+			참고
+				HQL은 CONCAT 대신에 ||도 사용할 수 있다.
+	
+	수학함수
+		함수
+			ABS(수학식)
+				설명 : 
+					절대값을 구한다.
+				예제 :
+					ABS(-10) = 10
+			SQRT(수학식)
+				설명 : 
+					제곱근을 구한다.
+				예제 : 
+					SQRT(4) = 2.0
+			MOD(수학식, 나눌 수)
+				설명 : 
+					나머지를 구한다.
+				예제 : 
+					MOD(4, 3) = 1
+			SIZE(컬렉션 값 연관 경로식)
+				설명 :
+					컬렉션의 크기를 구한다.
+				예제 :
+					SIZE(t.member)
+			INDEX(별칭)
+				설명 :
+					LIST 타입 컬렉션의 위치값을 구함.
+					단 컬렉션이 @OrderColumn을 사용하는 LIST 타입일 때만
+					사용할 수 있따.
+				예제 :
+					t.member m where INDEX(m) > 3
+	
+	날짜함수
+		날짜함수는 데이터베이스의 현재 시간을 조회한다.
+		CURRENT_DATE : 현재 날짜
+		CURRENT_TIME : 현재 시간
+		CURRENT_TIMESTAMP : 현재 날짜 시간
+		예)
+			select CURRENT__DATE, CURRENT_TIME, CURRENT_TIMESTAMP from Team t
+			// 결과 : 2013-08-19, 23:38:17, 2013-08-19 23:38:17
+			
+			종료 이벤트 조회
+			select e from Event where e.endDate < CURRENT_DATE
+				
+			하이버네이트는 날짜 타입에서 년, 월, 일, 시간, 분, 초, 값을 구하는 기능을 지원한다.
+			YEAR, MONTH, DAY, HOUR, MINUTE, SECOND
+			
+			select year(CURRENT_TIMESTAMP), month(CURRENT_TIMESTAMP), day(CURRENT_TIMESTAMP) from Member		
+		데이터베이스들은 각자의 방식으로 더 많은 날짜 함수를 지원한다. 그리고 각각의 날짜 함수는 하이버네이트가
+		제공하는 데이터베이스 방언에 등록되어 있다.
+		예를 들어 오라클 방언을 사용하면 to_date, to_char 함수를 사용할 수 있다.
+		물론 다른 데이터베이스를 사용하면 동작하지 않는다.

@@ -1,0 +1,51 @@
+조건식
+	타입 표현
+		종류
+			문자
+				설명 : 작은 따옴표 사이에 표현
+					작은 따옴표를 표현하고 싶으면 작은 따옴표 연속 두 개('') 사용
+				예제 : 'HELLO', 'She''s'
+			숫자
+				설명 : 
+					L(Long 타입 지정)
+					D(Double 타입 지정)
+					F(Float 타입 지정)
+				예제 : 10L, 10D, 10F
+			날짜
+				설명 :
+					DATE{d 'yyyy-mm-dd'}
+					TIME{t 'hh-mm-ss'} 
+					DATETIME{ts 'yyyy-mm-dd hh:mm:ss.f'} 
+				예제 : 
+					{d '2012-03-24'}
+					{t '10-11-11'}
+					{ts '2012-03-24 10-11-11.123'} 
+					m.createDate = {d '2012-03-24'}
+			Boolean
+				설명 : TRUE, FALSE
+			Enum
+				설명 :
+					패키지명을 포함한 전체 이름을 사용해야 한다.
+				예제 :
+					jpabook.MemberType.Admin
+			엔티티 타입
+				설명 : 
+					엔티티의 타입을 표현한다. 주로 상속과 관련해서 사용한다.
+				예제 :
+					TYPE(m) = Member
+
+	연산자 우선 순위
+		연산자 우선 순위는 다음과 같다.	
+		1. 경로 탐색 연산(.)
+		2. 수학 연산 : +, -(단항 연산자), *, /, +, -
+		3. 비교 연산 : =, >, >=, < <=, <>, [NOT] BETWEEN, [NOT] LIKE, [NOT]IN,
+		IS [NOT] NULL, IS [NOT] EMPTY, [NOT] MEMBER [OF], [NOT] EXISTS
+		4. 논리 연산 : NOT, AND, OR
+	
+	논리 연산관 비교식
+		ㅁ 논리 연산
+			AND : 둘 다 만족하면 참
+			OR : 둘 중 하나만 만족해도 참
+			NOT : 조건식의 결과 반대
+		ㅁ 비교식
+			= | > | >= | < | <= | <>
