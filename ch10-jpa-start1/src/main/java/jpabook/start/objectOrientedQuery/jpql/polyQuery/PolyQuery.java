@@ -140,6 +140,9 @@ public class PolyQuery extends JpqlCommon {
 				 * 		JAP에서 어노테이션으로 작성할 수 있는 것은 XML로도 작성할 수 있다.
 				 * 		물론 어노테이션을 사용하는 것이 직관적이고 편리하다. 하지만 Named 쿼리를 작성할 때는 XML을 사용하는 것이 더 편하다.
 				 * 		자바 언어로 멀티라인 문자를 다루는 것은 상당히 귀찮은 일이다.
+				 * 		
+				 * 		META-INF\ormMember.xml 파일에 쿼리를 작성하고 \META-INF\persistence.xml 파일에 작성한 ormMember.xml 파일을 등록해야 한다.
+				 * 
 				 */
 				System.out.println("--------------- [@NamedQuery] Named 쿼리: 정적 쿼리 ---------------");
 				em.createNamedQuery("CH10_OOQ_MEMBER.findByUserName", Member.class)
