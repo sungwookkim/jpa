@@ -5,11 +5,12 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
-import jpabook.start.objectOrientedQuery.jpql.entity.Team;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
+import jpabook.start.objectOrientedQuery.entity.Team;
 
-public class JpqlJoinMain extends JpqlCommon {
+public class JpqlJoinMain extends DataInit {
 
 	/*
 	 * JPQL 조인
@@ -20,9 +21,12 @@ public class JpqlJoinMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 
+		Print print = new Print();
+		Print subPrint = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 내부 조인 ===============");
+				print.mainStartPrint("내부 조인");
 				/*
 				 * 내부 조인
 				 * 
@@ -51,9 +55,9 @@ public class JpqlJoinMain extends JpqlCommon {
 						, m.getAge()
 						, t.getName() ));
 				});
-				System.out.println("=========================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== 외부 조인 ===============");
+				print.mainStartPrint("외부 조인");
 				/*
 				 * 외부 조인
 				 * 
@@ -71,6 +75,8 @@ public class JpqlJoinMain extends JpqlCommon {
 						, l.getAge()));
 				});
 				
+				
+				
 				/*
 				 * 컬렉션 조인
 				 * 
@@ -83,7 +89,7 @@ public class JpqlJoinMain extends JpqlCommon {
 				 * 컬렉션 조인 시 JOIN 대신에 IN을 사용할 수 있는데, 기능상 JOIN과 같지만 컬렉션일 때만 사용할 수 있다.
 				 * 과거 EJB 시절의 유물이고 특별한 장점도 없으므로 그냥 JOIN 명령어를 사용하자.
 				 */
-				System.out.println("--------------- 컬렉션 조인 ---------------");
+				subPrint.subStartPrint("컬렉션 조인");
 				List<Object[]>query = em.createQuery("SELECT m, t"
 					+ " FROM CH10_OOQ_TEAM t LEFT JOIN t.member m")
 					.getResultList();
@@ -98,7 +104,9 @@ public class JpqlJoinMain extends JpqlCommon {
 						, m.getAge()
 						, t.getName() ));
 				});
-				System.out.println("-------------------------------------------");
+				subPrint.subEndPrint();
+				
+				
 				
 				/*
 				 * 세타 조인
@@ -107,21 +115,23 @@ public class JpqlJoinMain extends JpqlCommon {
 				 * 세타 조인을 사용하면 전혀 관계없는 엔티티도 조인할 수 있다.
 				 * 예제를 보면 전혀 관련 없는 Member.userName과 Team.name을 조인한다.
 				 */
-				System.out.println("--------------- 세타 조인 ---------------");
+				subPrint.subStartPrint("세타 조인");
 				Long setaJoin = em.createQuery("SELECT COUNT(m)"
 					+ " FROM CH10_OOQ_MEMBER m, CH10_OOQ_TEAM t"
 					+ " WHERE m.userName = t.name", Long.class)
 				.getSingleResult();
 				
 				System.out.println(String.format("member count : %s", setaJoin));
-				System.out.println("-----------------------------------------");
+				subPrint.subEndPrint();
+				
+				
 				
 				/*
 				 * JOIN ON 절(JPA 2.1)
 				 * JPA 2.1부터 조인할 때 ON 절을 지원한다. ON 절을 사용하면 조인 대상을 필터링하고 조인할 수 있다.
 				 * 참고로 내부 조인의 ON 절은 WHERE 절을 사용할 때와 결과가 같으므로 보통 ON 절은 외부 조인에서만 사용한다.
 				 */
-				System.out.println("--------------- JOIN ON 절(JPA 2.1) ---------------");
+				subPrint.subStartPrint("JOIN ON 절(JPA 2.1)");
 				query = em.createQuery("SELECT m, t"
 					+ " FROM CH10_OOQ_MEMBER m"
 					+ " LEFT JOIN m.team t on t.name = 'A'")
@@ -137,8 +147,9 @@ public class JpqlJoinMain extends JpqlCommon {
 						, m.getAge()
 						, Optional.ofNullable(t.getName()).orElse("") ));
 				});
-				System.out.println("---------------------------------------------------");
-				System.out.println("=========================================");
+				subPrint.subEndPrint();
+				
+				print.mainEndPrint();
 			})
 			.start();
 	}

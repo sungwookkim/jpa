@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.joinTable.onetomany.entity.Child;
 import jpabook.start.joinTable.onetomany.entity.Parent;
 
@@ -18,9 +19,13 @@ public class OneToManyJoinTableMain {
 	 * 유니크 제약조건을 걸어야 한다(CHILD_ID는 기본 키이므로 유니크 제약조건이 걸려있다.) 
 	 */
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 일대다 조인테이블 저장 ===============");
+				print.mainStartPrint("일대다 조인테이블 저장");
+
 				tx.begin();
 				
 				Parent parent = new Parent("sinnake_parent");
@@ -37,13 +42,15 @@ public class OneToManyJoinTableMain {
 				em.persist(parent);
 				
 				tx.commit();
-				System.out.println("======================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 일대다 조인테이블 저장 ===============");
+				print.mainStartPrint("일대다 조인테이블 저장");
+
 				Parent parent = Optional.ofNullable(em.createQuery("select p from CH07_JOINTABLE_ONETOMANY_PARENT p where p.id = :id", Parent.class)
 					.setParameter("id", 1L)
 					.getResultList() )
@@ -59,8 +66,8 @@ public class OneToManyJoinTableMain {
 						, Optional.ofNullable(c.getId()).orElse(-1L)
 						, Optional.ofNullable(c.getName()).orElse("") ));	
 				});
-				System.out.println("======================================================");
 				
+				print.mainEndPrint();
 			})
 			.start();
 	}

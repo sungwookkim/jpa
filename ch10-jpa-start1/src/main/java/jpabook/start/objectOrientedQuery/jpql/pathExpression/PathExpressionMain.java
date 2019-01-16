@@ -4,11 +4,12 @@ import java.util.List;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
-import jpabook.start.objectOrientedQuery.jpql.entity.Team;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
+import jpabook.start.objectOrientedQuery.entity.Team;
 
-public class PathExpressionMain extends JpqlCommon {
+public class PathExpressionMain extends DataInit {
 
 	/*
 	 * 경로 표현식
@@ -44,11 +45,14 @@ public class PathExpressionMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 
+		Print print = new Print();
+		Print subPrint = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 경로 표현식 ===============");
+				print.mainStartPrint("경로 표현식");
 				
-				System.out.println("--------------- 상태 필드 경로 탐색 ---------------");
+				subPrint.subStartPrint("상태 필드 경로 탐색");
 				List<Object[]> query = em.createQuery("SELECT "
 					+ "m.userName"
 					+ ", m.age"
@@ -61,7 +65,9 @@ public class PathExpressionMain extends JpqlCommon {
 					
 					System.out.println(String.format("userName : %s, age : %s", userName, age));
 				});
-				System.out.println("---------------------------------------------------");
+				subPrint.subEndPrint();
+
+
 				
 				/*
 				 * 단일 값 연관 경로 탐색
@@ -71,7 +77,7 @@ public class PathExpressionMain extends JpqlCommon {
 				 * 참고로 묵시전 조인은 모두 내부 조인이다."
 				 * 외부 조인은 명시저그로 JOIN 키워드를 사용해야 한다.
 				 */
-				System.out.println("--------------- [묵시적 조인] 단일 값 연관 경로 탐색 ---------------");
+				subPrint.subStartPrint("[묵시적 조인] 단일 값 연관 경로 탐색");
 				List<Member> orderMember = em.createQuery("SELECT o.member FROM CH10_OOQ_ORDER o", Member.class)
 					.getResultList();
 				
@@ -81,9 +87,11 @@ public class PathExpressionMain extends JpqlCommon {
 						, m.getUserName()
 						, m.getAge() ));
 				});
-				System.out.println("--------------------------------------------------------------------");
+				subPrint.subEndPrint();
 
-				System.out.println("--------------- [묵시적 조인] 단일 값 연관 경로 탐색 ---------------");
+				
+				
+				subPrint.subStartPrint("[묵시적 조인] 단일 값 연관 경로 탐색");
 				List<Team> memberTeam = em.createQuery("SELECT o.member.team"
 						+ "	FROM CH10_OOQ_ORDER o"
 						+ " WHERE o.product.name = :productName AND o.address.city = :addressCity", Team.class)
@@ -96,9 +104,11 @@ public class PathExpressionMain extends JpqlCommon {
 						, t.getId()
 						, t.getName() ));
 				});
-				System.out.println("--------------------------------------------------------------------");
+				subPrint.subEndPrint();
 				
-				System.out.println("--------------- [명시적 조인] 단일 값 연관 경로 탐색 ---------------");
+				
+				
+				subPrint.subStartPrint("[명시적 조인] 단일 값 연관 경로 탐색");
 				orderMember = em.createQuery("SELECT "
 						+ " o.member "
 						+ " FROM CH10_OOQ_ORDER o"
@@ -111,7 +121,9 @@ public class PathExpressionMain extends JpqlCommon {
 						, m.getUserName()
 						, m.getAge() ));
 				});
-				System.out.println("--------------------------------------------------------------------");
+				subPrint.subEndPrint();
+
+
 				
 				/*
 				 * 컬렉션 값 연관 경로 탐색
@@ -127,16 +139,15 @@ public class PathExpressionMain extends JpqlCommon {
 				 * size를 사용하면 COUNT 함수를 사용하는 SQL로 적절히 변환된다.
 				 * select t.member.size from Team t
 				 */
-				System.out.println("--------------- 컬렉션 값 연관 경로 탐색 ---------------");
+				subPrint.subStartPrint("컬렉션 값 연관 경로 탐색");
 				em.createQuery("SELECT m.userName FROM CH10_OOQ_TEAM t INNER JOIN t.member m", String.class)
 					.getResultList()
 					.stream().forEach(userName -> {
 						System.out.println(String.format("member name : %s", userName));
 					});
-				System.out.println("--------------------------------------------------------");
+				subPrint.subEndPrint();
 
-				
-				System.out.println("===========================================");				
+				print.mainEndPrint();
 			})
 			.start();
 

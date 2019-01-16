@@ -2,6 +2,7 @@ package jpabook.start.onetomany.unidirectional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.onetomany.unidirectional.entity.Member;
 import jpabook.start.onetomany.unidirectional.entity.Team;
 
@@ -37,10 +38,13 @@ public class OneToManyUniMain {
 	 * 상황에 다르지만 일대다 단방향 매핑보다는 다대일 양방향 매핑을 권장한다.
 	 */
 	public static void main(String args[]) {
-			
+
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원과 팀 설정 ===============");
+				print.mainStartPrint("회원과 팀 설정");
+
 				tx.begin();
 				
 				Member member1 = new Member("sinnake1", "신나게1");
@@ -55,18 +59,19 @@ public class OneToManyUniMain {
 				em.persist(team1);
 				
 				tx.commit();
-				System.out.println("==============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 팀 ID가 1인 회원 ===============");
+				print.mainStartPrint("팀 ID가 1인 회원");
 				
 				em.find(Team.class, new Long(1)).getMembers()
 					.stream().forEach(m -> System.out.println(m.getUsername()) );
 				
-				System.out.println("================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

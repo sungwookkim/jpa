@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.manytomany.primarykey.entity.Member;
 import jpabook.start.manytomany.primarykey.entity.Orders;
 import jpabook.start.manytomany.primarykey.entity.Product;
@@ -23,9 +24,12 @@ public class PrimaryKeyMain {
 	 */
 	public static void main(String[] args) {
 
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원, 상품 저장 ===============");
+				print.mainStartPrint("회원, 상품 저장");
+				
 				tx.begin();
 
 				Product product = new Product("product");
@@ -71,13 +75,14 @@ public class PrimaryKeyMain {
 				em.persist(orders4);
 
 				tx.commit();
-				System.out.println("===============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake1 회원의 product1 상품 구매내역 조회 ===============");
+				print.mainStartPrint("sinnake1 회원의 product1 상품 구매내역 조회");
 				
 				Orders orders = Optional.ofNullable(em.find(Orders.class, new Long(4))).orElseGet(Orders::new);
 				Member member = Optional.ofNullable(orders.getMember()).orElseGet(Member::new);
@@ -87,10 +92,12 @@ public class PrimaryKeyMain {
 						, Optional.ofNullable(member.getUserName()).orElse("")
 						, Optional.ofNullable(product.getName()).orElse("")
 						, Optional.ofNullable(orders.getOrderAmount()).map(String::valueOf).orElse("") ));
-				
-				System.out.println("===========================================================================");
 
-				System.out.println("=============== product1 상품을 구매한 모든 회원 조회 ===============");
+				print.mainEndPrint();
+				
+				
+
+				print.mainStartPrint("product1 상품을 구매한 모든 회원 조회");
 
 				List<Orders> ordersList = Optional.ofNullable(em.createQuery("select p from CH06_MANY_TO_MANY_PRIMARYKEY_PRODUCT p where p.name = :name", Product.class)
 					.setParameter("name", "product1").getResultList())
@@ -110,7 +117,7 @@ public class PrimaryKeyMain {
 						, Optional.ofNullable(o.getOrderAmount()).map(String::valueOf).orElse("") ));
 				});
 
-				System.out.println("=====================================================================");
+				print.mainEndPrint();
 			})
 			.start();
 		

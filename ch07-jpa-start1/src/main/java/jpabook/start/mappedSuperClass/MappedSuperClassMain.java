@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.mappedSuperClass.entity.Member;
 import jpabook.start.mappedSuperClass.entity.Seller;
 
@@ -32,19 +33,23 @@ public class MappedSuperClassMain {
 	
 	public static void main(String[] args) {
 
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원, 셀러 저장 ===============");
+				print.mainStartPrint("회원, 셀러 저장");
+
 				tx.begin();
 				
 				em.persist(new Member("sinnake", "rnsqka2000@gmail.com"));
 				em.persist(new Seller("sinnake", "sinnake Shop"));				
-				
+
 				tx.commit();
-				System.out.println("===============================================");
+				
+				print.mainEndPrint();
 			})
 			.commitAfter(em -> {
-				System.out.println("=============== 회원 조회 ===============");
+				print.mainStartPrint("회원 조회");
 
 				List<Member> members = Optional.ofNullable(em.createQuery("select m from CH07_MAPPED_SUPER_CLASS_MEMBER m where m.name = :name", Member.class)
 					.setParameter("name", "sinnake")
@@ -59,9 +64,11 @@ public class MappedSuperClassMain {
 						, Optional.ofNullable(m.getEmail()).orElse("") ));
 				});
 				
-				System.out.println("=========================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== 셀러 조회 ===============");
+				
+				
+				print.mainStartPrint("셀러 조회");
 
 				List<Seller> sellers = Optional.ofNullable(em.createQuery("select s from CH07_MAPPED_SUPER_CLASS_SELLER s where s.name = :name", Seller.class)
 					.setParameter("name", "sinnake")
@@ -76,10 +83,10 @@ public class MappedSuperClassMain {
 						, Optional.ofNullable(s.getShopName()).orElse("") ));
 				});
 				
-				System.out.println("=========================================");
+				print.mainEndPrint();
 			})
 			.start();
-				
+
 	}
 
 }

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import model3.entity.Category;
 import model3.entity.CategoryItem;
 import model3.entity.Delivery;
@@ -24,9 +25,12 @@ public class Model3Main {
 
 	public static void main(String[] args) {
 		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 카테고리, 상품, 회원, 주문 저장 ===============");
+				print.mainStartPrint("카테고리, 상품, 회원, 주문 저장");
+
 				tx.begin();
 				
 				/************/
@@ -126,14 +130,14 @@ public class Model3Main {
 					.collect(Collectors.toList());
 				
 				tx.commit();
-				System.out.println("===============================================================");
-
+				
+				print.mainEndPrint();
 			})
 			.start();
 			
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake1 회원이 구매한 전체 상품 내역 ===============");
+				print.mainStartPrint("sinnake1 회원이 구매한 전체 상품 내역");
 				
 				List<Order> order = Optional.ofNullable(em.createQuery("select o from CH06_MODEL3_ORDERS o where o.member.userId = :userId", Order.class)									
 					.setParameter("userId", "sinnake1")
@@ -168,12 +172,9 @@ public class Model3Main {
 						});
 					});
 				
-				System.out.println("=====================================================================");
+				print.mainEndPrint();
 			})
 			.start();
-
-		
-		
 	}
 
 }

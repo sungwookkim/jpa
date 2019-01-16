@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.relationship.identifying.onetooen.entity.Board;
 import jpabook.start.relationship.identifying.onetooen.entity.BoardDetail;
 
@@ -18,9 +19,12 @@ public class Identifying_OneToOneMain {
 	 */
 	public static void main(String[] args) {
 
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 일대일 식별 관계 매핑 저장 ===============");
+				print.mainStartPrint("일대일 식별 관계 매핑 저장");
+
 				tx.begin();
 				
 				Board board = new Board("board Title");
@@ -31,13 +35,15 @@ public class Identifying_OneToOneMain {
 				em.persist(boardDetail);
 				
 				tx.commit();
-				System.out.println("==========================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
-			.commitAfter(em -> {				
-				System.out.println("=============== 일대일 식별 관계 매핑 조회 ===============");
+			.commitAfter(em -> {
+				print.mainStartPrint("일대일 식별 관계 매핑 조회");
+
 				List<BoardDetail> boardDetails = Optional.ofNullable(em.createQuery("select b from CH07_IDENTIFYING_BOARDDETAIL b where b.board.id = :id", BoardDetail.class)
 					.setParameter("id", 1L)
 					.getResultList() )
@@ -53,7 +59,8 @@ public class Identifying_OneToOneMain {
 						, Optional.ofNullable(b.getId()).map(String::valueOf).orElse("-1")
 						, Optional.ofNullable(b.getContent()).orElse("") ));
 				});
-				System.out.println("==========================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 

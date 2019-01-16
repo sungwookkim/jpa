@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.valueType.embeddedType.entity.Member;
 import jpabook.start.valueType.embeddedType.entity.embedded.Address;
 import jpabook.start.valueType.embeddedType.entity.embedded.Period;
@@ -28,9 +29,11 @@ public class EmbeddedTypeMain {
 	 */
 	public static void main(String[] args) {
 
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 임베디드 타입 저장 ===============");
+				print.mainStartPrint("임베디드 타입 저장");
 				tx.begin();
 				
 				Address address = new Address("sinnake city", "sinnake street", "sinnake zipCode");
@@ -41,13 +44,14 @@ public class EmbeddedTypeMain {
 				em.persist(member);
 				
 				tx.commit();
-				System.out.println("==================================================");
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 임베디드 타입 조회 ===============");
+				print.mainStartPrint("임베디드 타입 조회");
+
 				Member member = Optional.ofNullable(em.find(Member.class, 1L)).orElseGet(Member::new);				
 				Period period = Optional.ofNullable(member.getPeriod()).orElseGet(Period::new);
 				Address address = Optional.ofNullable(member.getAddress()).orElseGet(Address::new);
@@ -65,7 +69,8 @@ public class EmbeddedTypeMain {
 					, Optional.ofNullable(address.getCity()).orElse("")
 					, Optional.ofNullable(address.getStreet()).orElse("")
 					, Optional.ofNullable(address.getZipCode()).orElse("") ));
-				System.out.println("==================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 	}

@@ -3,13 +3,14 @@ package jpabook.start;
 import java.util.Date;
 
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.entity.Member;
 import jpabook.start.entity.RoleType;
 
 public class JpaMain {
 
 	public static void main(String args[]) {
-
+		
 		new Logic()
 			.logic(em -> {
 				Member member1 = new Member();

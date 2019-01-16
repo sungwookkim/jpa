@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.onetomany.bidirectional.entity.Member;
 import jpabook.start.onetomany.bidirectional.entity.Team;
 
@@ -32,6 +33,8 @@ public class OneToManyBiMain {
 	 */
 	public static void main(String args[]) {
 		
+		Print print = new Print();
+		
 		new Logic()
 			.logic(em -> {
 				Member member1 = new Member("sinnake1", "신나게1");
@@ -50,7 +53,7 @@ public class OneToManyBiMain {
 
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 팀 ID가 1인 회원 ===============");
+				print.mainStartPrint("팀 ID가 1인 회원");
 				
 				Team team = Optional.ofNullable(em.find(Team.class, new Long(1))).orElse(new Team());
 				team.getMembers()
@@ -61,13 +64,13 @@ public class OneToManyBiMain {
 							, Optional.ofNullable(m.getUsername()).orElse("") ));
 					} );
 				
-				System.out.println("================================================");				
+				print.mainEndPrint();				
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 회원 ID가 1인 회원의 팀 정보 ===============");
+				print.mainStartPrint("회원 ID가 1인 회원의 팀 정보");
 				
 				Member member = Optional.ofNullable(em.find(Member.class, new Long(1))).orElse(new Member());
 				System.out.println(String.format("팀명 : %s, 회원 ID : %s, 회원 이름 : %s"
@@ -75,7 +78,7 @@ public class OneToManyBiMain {
 					, Optional.ofNullable(member.getMemberId()).orElse("")
 					, Optional.ofNullable(member.getUsername()).orElse("") ));
 				
-				System.out.println("============================================================");				
+				print.mainEndPrint();				
 			})
 			.start();
 	}

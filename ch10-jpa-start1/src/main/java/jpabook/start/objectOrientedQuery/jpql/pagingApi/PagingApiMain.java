@@ -4,10 +4,11 @@ import java.util.List;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Order;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Order;
 
-public class PagingApiMain extends JpqlCommon {
+public class PagingApiMain extends DataInit {
 	/*
 	 * 페이징 API
 	 * 
@@ -25,9 +26,11 @@ public class PagingApiMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 
+		Print print = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 페이징 API ===============");
+				print.mainStartPrint("페이징 API");
 				List<Order> orders = em.createQuery("SELECT o FROM CH10_OOQ_ORDER o", Order.class)
 					// 시작 위치는 10이므로 11번째부터 시작한다.
 					.setFirstResult(10)
@@ -39,7 +42,7 @@ public class PagingApiMain extends JpqlCommon {
 					System.out.println("order id : " + o.getId());
 					System.out.println("order orderAmount : " + o.getOrderAmount());
 				});
-				System.out.println("==========================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import model6.entity.Category;
 import model6.entity.CategoryItem;
 import model6.entity.Delivery;
@@ -30,9 +31,12 @@ public class Model6Main {
 
 	public static void main(String[] args) {
 		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 카테고리, 상품, 회원, 주문 저장 ===============");
+				print.mainStartPrint("카테고리, 상품, 회원, 주문 저장");
+
 				tx.begin();
 				
 				/************/
@@ -166,17 +170,16 @@ public class Model6Main {
 				 */
 				//em.persist(delivery2);
 				em.persist(order2);
-
 				
 				tx.commit();
-				System.out.println("===============================================================");
-
+				
+				print.mainEndPrint();
 			})
 			.start();
 			
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake1 회원이 구매한 전체 상품 내역 ===============");
+				print.mainStartPrint("sinnake1 회원이 구매한 전체 상품 내역");				
 				
 				List<Order> order = Optional.ofNullable(em.createQuery("select o from CH09_MODEL6_ORDERS o where o.member.userId = :userId", Order.class)									
 					.setParameter("userId", "sinnake1")
@@ -213,9 +216,12 @@ public class Model6Main {
 						});
 					});
 				
-				System.out.println("=====================================================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== sinnake1 회원이 구매한 전체 상품 내역 ===============");
+				
+								
+				print.mainStartPrint("sinnake1 회원이 구매한 전체 상품 내역");
+				System.out.println("===============  ===============");
 				List<OrderItem> orderItems = em.createQuery("select o from CH09_MODEL6_ORDER_ITEM o where o.order.member.userId = 'sinnake1'", OrderItem.class)
 					.getResultList();
 
@@ -264,11 +270,6 @@ public class Model6Main {
 				System.out.println("=====================================================================");
 				
 			})
-			.start();
-
-		
-		
+			.start();				
 	}
-	
-
 }

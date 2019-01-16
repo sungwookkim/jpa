@@ -7,12 +7,15 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.manytomany.unidirectional.entity.Member;
 import jpabook.start.manytomany.unidirectional.entity.Product;
 
 public class ManyToMany_UniMain {
 
 	public static void main(String[] args) {
+		Print print = new Print();
+		
 		List<Product> productList = Arrays.asList(
 			new Product("product1")
 			, new Product("product2")
@@ -21,7 +24,8 @@ public class ManyToMany_UniMain {
 		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원, 상품 저장 ===============");
+				print.mainStartPrint("회원, 상품 저장");
+
 				tx.begin();
 				
 				Member member = new Member("sinnake", "sinnake_name");				
@@ -34,14 +38,15 @@ public class ManyToMany_UniMain {
 				em.persist(member);
 				
 				tx.commit();
-				System.out.println("===============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake 회원의 상품 조회 ===============");
+				print.mainStartPrint("sinnake 회원의 상품 조회");
 
 				Member member = Optional.ofNullable(em.createQuery("select m from CH06_MANY_TO_MANY_UNI_MEMBER m where m.userId = 'sinnake'", Member.class)
 					.getResultList())
@@ -55,7 +60,7 @@ public class ManyToMany_UniMain {
 						, Optional.ofNullable(p.getName()).orElse("") ));
 				});
 				
-				System.out.println("========================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

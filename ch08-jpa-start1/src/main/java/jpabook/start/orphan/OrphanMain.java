@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.orphan.entity.Child;
 import jpabook.start.orphan.entity.Parent;
 
@@ -28,9 +29,13 @@ public class OrphanMain {
 	 * 따라서 부모를 제거하면 자식도 같이 제거된다. 이것은 CascadeType.REMOVE를 설정한 것과 같다.
 	 */
 	public static void main(String[] args) {
+
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) ->{
-				System.out.println("=============== 고아 객체 저장 ===============");
+				print.mainStartPrint("고아 객체 저장");
+
 				tx.begin();
 
 				Parent parent = new Parent("sinnake parent");
@@ -42,13 +47,15 @@ public class OrphanMain {
 				
 				em.persist(parent);
 				tx.commit();
-				System.out.println("==============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.logic((em, tx) -> {
-				System.out.println("=============== 고아 객체 삭제 ===============");
+				print.mainStartPrint("고아 객체 삭제");
+
 				tx.begin();
 
 				Parent parent = Optional.ofNullable(em.find(Parent.class, 1L)).orElseGet(Parent::new);
@@ -66,10 +73,10 @@ public class OrphanMain {
 				//childs.clear();
 				
 				tx.commit();
-				System.out.println("==============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
-
 	}
 
 }

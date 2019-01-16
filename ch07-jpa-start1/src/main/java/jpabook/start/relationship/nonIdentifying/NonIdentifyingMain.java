@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.relationship.nonIdentifying.entity.Child;
 import jpabook.start.relationship.nonIdentifying.entity.GrandChild;
 import jpabook.start.relationship.nonIdentifying.entity.Parent;
@@ -16,9 +17,12 @@ public class NonIdentifyingMain {
 	 */
 	public static void main(String[] args) {
 		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 비식별 관계 매핑 저장 ===============");
+				print.mainStartPrint("비식별 관계 매핑 저장");
+
 				tx.begin();
 				
 				Parent parent = new Parent("sinnake_parent_id", "sinnake_parent_name");
@@ -30,13 +34,15 @@ public class NonIdentifyingMain {
 				em.persist(grandChild);
 				
 				tx.commit();
-				System.out.println("=====================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== [Parent] 비식별 관계 매핑 조회 ===============");
+				print.mainStartPrint("[Parent] 비식별 관계 매핑 조회");
+
 				Parent parent = Optional.ofNullable(em.createQuery("select p from CH07_NONIDENTIFYING_PARENT p where p.parentId = :parentId", Parent.class)
 					.setParameter("parentId", "sinnake_parent_id")
 					.getResultList() )
@@ -48,9 +54,13 @@ public class NonIdentifyingMain {
 					, Optional.ofNullable(parent.getId()).map(String::valueOf).orElse("-1") 
 					, Optional.ofNullable(parent.getParentId()).orElse("")
 					, Optional.ofNullable(parent.getName()).orElse("") ));
-				System.out.println("==============================================================");
 				
-				System.out.println("=============== [Child] 비식별 관계 매핑 조회 ===============");
+				print.mainEndPrint();
+				
+				
+				
+				print.mainStartPrint("[Child] 비식별 관계 매핑 조회");
+
 				Child child = Optional.ofNullable(em.createQuery("select c from CH07_NONIDENTIFYING_CHILD c where c.parent.id = :parent_id", Child.class)
 					.setParameter("parent_id", Optional.ofNullable(parent.getId()).orElse(-1L) )
 					.getResultList() )
@@ -63,9 +73,13 @@ public class NonIdentifyingMain {
 					, Optional.ofNullable(child.getId()).map(String::valueOf).orElse("-1")
 					, Optional.ofNullable(child.getChildId()).orElse("")
 					, Optional.ofNullable(child.getName()).orElse("") ));
-				System.out.println("=============================================================");
+
+				print.mainEndPrint();
 				
-				System.out.println("=============== [GrandChild] 비식별 관계 매핑 조회 ===============");
+				
+				
+				print.mainStartPrint("[GrandChild] 비식별 관계 매핑 조회");
+
 				GrandChild grandChild = Optional.ofNullable(em.createQuery("select g from CH07_NONIDENTIFYING_GRANDCHILD g where g.child.id = :child_id", GrandChild.class)
 					.setParameter("child_id", Optional.ofNullable(child.getId()).orElse(-1L) )
 					.getResultList() )
@@ -78,8 +92,8 @@ public class NonIdentifyingMain {
 					, Optional.ofNullable(grandChild.getId()).map(String::valueOf).orElse("-1")
 					, Optional.ofNullable(grandChild.getGrandChildId()).orElse("")
 					, Optional.ofNullable(grandChild.getName()).orElse("") ));
-				System.out.println("==================================================================");
-					
+				
+				print.mainEndPrint();									
 			})
 			.start();
 	}

@@ -5,12 +5,14 @@ import java.util.function.Supplier;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.unidirectional.manytoone.entity.Member;
 import jpabook.start.unidirectional.manytoone.entity.Team;
 
 public class ManyToOneMain {
 
 	public static void main(String[] args) {
+		Print print = new Print();
 		Supplier<Member> initMember = () -> { return new Member("", "", new Team()); };
 		
 		/*
@@ -18,7 +20,8 @@ public class ManyToOneMain {
 		 */
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 멤버 및 팀 저장 ===============");
+				print.mainStartPrint("멤버 및 팀 저장");
+
 				tx.begin();
 
 				Team team = new Team("내팀", "이기는팀 우리팀");				
@@ -31,7 +34,8 @@ public class ManyToOneMain {
 				em.persist(ssinnakeMember);
 				
 				tx.commit();
-				System.out.println("===============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
@@ -40,12 +44,14 @@ public class ManyToOneMain {
 		 */
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter((em) -> {
-				System.out.println("=============== 회원 조회 ===============");
+				print.mainStartPrint("회원 조회");
+
 				Member sinnakeMember = Optional.ofNullable(em.find(Member.class, "sinnake")).orElse(initMember.get());
 				
 				System.out.println("sinnake 회원 전체 정보 : " + sinnakeMember);
 				System.out.println("sinnake 회원 팀 정보 : " + sinnakeMember.getTeam());
-				System.out.println("=========================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
@@ -54,13 +60,15 @@ public class ManyToOneMain {
 		 */
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter((em) -> {
-				System.out.println("=============== jpql 조회 ===============");
+				print.mainStartPrint("jpql 조회");
+
 				String jpql = "select m from MANY_TO_ONE_MEMBER m join m.team t where t.name = :teamName";
 
 				em.createQuery(jpql, Member.class)
 					.setParameter("teamName", "이기는팀 우리팀")
 					.getResultStream().forEach(m -> System.out.println("내팀의 전체 회원 : " + m));
-				System.out.println("=========================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
@@ -69,7 +77,8 @@ public class ManyToOneMain {
 		 */
 		new Logic(JPA_AUTO.UPDATE)
 			.logic((em, tx) -> {
-				System.out.println("=============== 특정 회원 팀 정보 수정 ===============");
+				print.mainStartPrint("특정 회원 팀 정보 수정");
+
 				tx.begin();
 				
 				Team team = new Team("남팀", "졌으니깐 남의 팀");
@@ -80,7 +89,8 @@ public class ManyToOneMain {
 					.setTeam(team);
 				
 				tx.commit();
-				System.out.println("======================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 
@@ -89,9 +99,11 @@ public class ManyToOneMain {
 		 */
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter((em) -> {
-				System.out.println("=============== 팀 정보 수정된 회원 조회 ===============");
+				print.mainStartPrint("팀 정보 수정된 회원 조회");
+
 				System.out.println("남팀 조회 : " + Optional.ofNullable(em.find(Member.class, "ssinnake")).orElse(initMember.get()) );
-				System.out.println("========================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
@@ -100,7 +112,8 @@ public class ManyToOneMain {
 		 */
 		new Logic(JPA_AUTO.UPDATE)
 			.logic((em, tx) -> {
-				System.out.println("=============== 멤버에 팀 연관 관계 제거 및 팀 제거 ===============");
+				print.mainStartPrint("멤버에 팀 연관 관계 제거 및 팀 제거");
+
 				tx.begin();
 
 				Team team = em.find(Team.class, "내팀");
@@ -122,7 +135,8 @@ public class ManyToOneMain {
 					});
 				
 				tx.commit();
-				System.out.println("===================================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 	}

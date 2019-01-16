@@ -7,10 +7,11 @@ import javax.persistence.TypedQuery;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
 
-public class TypeQueryMain extends JpqlCommon {
+public class TypeQueryMain extends DataInit {
 
 	/*
 	 * TypeQuery, Query
@@ -24,10 +25,12 @@ public class TypeQueryMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 		
+		Print print = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
 				// 반환할 타입을 명확하게 지정할 수 있으면 TypeQuery을 사용.
-				System.out.println("=============== TypeQuery 사용 ===============");
+				print.mainStartPrint("TypeQuery 사용");
 				TypedQuery<Member> typeQuery = em.createQuery("SELECT m FROM CH10_OOQ_MEMBER m", Member.class);
 				List<Member> typeQuerymembers = typeQuery.getResultList();
 				
@@ -35,11 +38,12 @@ public class TypeQueryMain extends JpqlCommon {
 					System.out.println("memberName : " + m.getUserName());
 					System.out.println("memberTeam : " + m.getTeam().getName());
 				});
-				System.out.println("==============================================");
+				print.mainEndPrint();
 	
 				
+				
 				// 반환할 타입이 명확치 않으면 Query을 사용. 
-				System.out.println("=============== query 사용 ===============");
+				print.mainStartPrint("query 사용");
 				Query query = em.createQuery("SELECT m FROM CH10_OOQ_MEMBER m");
 				List queryMembers = query.getResultList();
 				
@@ -48,7 +52,7 @@ public class TypeQueryMain extends JpqlCommon {
 					System.out.println("memberAge : " + ((Member)m).getAge());
 					System.out.println("memberTeam : " + ((Member)m).getTeam().getName());
 				});
-				System.out.println("==========================================");
+				print.mainEndPrint();
 			})
 			.start();		
 	}

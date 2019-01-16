@@ -4,13 +4,14 @@ import java.util.List;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
-import jpabook.start.objectOrientedQuery.jpql.entity.Product;
-import jpabook.start.objectOrientedQuery.jpql.entity.Team;
-import jpabook.start.objectOrientedQuery.jpql.entity.embedded.Address;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
+import jpabook.start.objectOrientedQuery.entity.Product;
+import jpabook.start.objectOrientedQuery.entity.Team;
+import jpabook.start.objectOrientedQuery.entity.embedded.Address;
 
-public class ProjectionMain extends JpqlCommon {
+public class ProjectionMain extends DataInit {
 
 	/*
 	 * 프로젝션
@@ -23,6 +24,8 @@ public class ProjectionMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 
+		Print print = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
 				/*
@@ -33,7 +36,7 @@ public class ProjectionMain extends JpqlCommon {
 				 * 
 				 * "조회한 엔티티는 영속성 컨텍스트에서 관리된다."
 				 */
-				System.out.println("=============== 엔티티 프로젝션 ===============");
+				print.mainStartPrint("엔티티 프로젝션");
 				// 회원 대상 프로젝션
 				List<Member> entityProjectionMember = em.createQuery("SELECT m FROM CH10_OOQ_MEMBER m", Member.class)
 					.getResultList();
@@ -50,7 +53,9 @@ public class ProjectionMain extends JpqlCommon {
 				entityProjectionTeam.stream().forEach(t -> {
 					System.out.println("memberTeam : " + t.getName());					
 				});
-				System.out.println("=========================================================");
+				print.mainEndPrint();
+				
+				
 				
 				/*
 				 * 임베디드 타입 프로젝션
@@ -60,7 +65,7 @@ public class ProjectionMain extends JpqlCommon {
 				 * 
 				 * "임베디드 타입은 엔티티 타입이 아닌 값 타입이다. 따라서 직접 조회한 임베디드 타입은 영속성 컨텍스트에 관리되지 않는다."
 				 */
-				System.out.println("=============== 임베디드 타입 프로젝션 ===============");
+				print.mainStartPrint("임베디드 타입 프로젝션");
 				// 아래와 같이 엔티티를 통해서 임베디드 타입을 조회할 수 있다.
 				List<Address> embeddedTypeProjectionAddress = em.createQuery("SELECT o.address FROM CH10_OOQ_ORDER o WHERE o.member.userName = :userName", Address.class)
 					.setParameter("userName", "sinnake1")
@@ -71,14 +76,16 @@ public class ProjectionMain extends JpqlCommon {
 					System.out.println("street : " + a.getStreet());
 					System.out.println("zipCode : " + a.getZipCode());									
 				});
-				System.out.println("======================================================");
+				print.mainEndPrint();
+				
+				
 				
 				/*
 				 * 스칼라 타입 프로젝션
 				 * 
 				 * 숫자, 문자, 날짜와 같은 기본 데이터 타입들을 스칼라 타입이라고 한다.
 				 */
-				System.out.println("=============== 스칼라 타입 프로젝션 ===============");
+				print.mainStartPrint("스칼라 타입 프로젝션");
 				// 전체 회원의 이름을 조회.
 				List<String> scalarProjectionUserName = em.createQuery("SELECT userName FROM CH10_OOQ_MEMBER m", String.class)
 					.getResultList();
@@ -139,7 +146,7 @@ public class ProjectionMain extends JpqlCommon {
 					System.out.println("productName : " + o.getProduct().getName());
 					System.out.println("orderAmount : " + o.getOrderAmount());
 				});
-				System.out.println("====================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

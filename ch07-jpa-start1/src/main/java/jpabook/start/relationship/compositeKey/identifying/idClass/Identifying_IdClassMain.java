@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.relationship.compositeKey.identifying.idClass.entity.Child;
 import jpabook.start.relationship.compositeKey.identifying.idClass.entity.ChildId;
 import jpabook.start.relationship.compositeKey.identifying.idClass.entity.GrandChild;
@@ -13,9 +14,13 @@ import jpabook.start.relationship.compositeKey.identifying.idClass.entity.Parent
 public class Identifying_IdClassMain {
 
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== [복합 키 - @IdClass] 식별 관계 매핑 저장 ===============");
+				print.mainStartPrint("[복합 키 - @IdClass] 식별 관계 매핑 저장");
+
 				tx.begin();
 				
 				Parent parent = new Parent("sinnake_parent_id", "sinnake_parent_name");
@@ -27,13 +32,14 @@ public class Identifying_IdClassMain {
 				em.persist(grandChild);
 				
 				tx.commit();
-				System.out.println("========================================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== [복합 키 - @IdClass] 식별 관계 Parent 조회 ===============");
+				print.mainStartPrint("[복합 키 - @IdClass] 식별 관계 Parent 조회");
 				
 				Parent parent = Optional.ofNullable(em.find(Parent.class, 1L)).orElseGet(Parent::new);
 
@@ -41,10 +47,12 @@ public class Identifying_IdClassMain {
 					, Optional.ofNullable(parent.getId()).map(String::valueOf).orElse("")
 					, Optional.ofNullable(parent.getMemberId()).orElse("")
 					, Optional.ofNullable(parent.getMemberName()).orElse("") ));
+
+				print.mainEndPrint();
 				
-				System.out.println("==========================================================================");
 				
-				System.out.println("=============== [복합 키 - @IdClass] 식별 관계 Child 조회 ===============");
+				
+				print.mainStartPrint("[복합 키 - @IdClass] 식별 관계 Child 조회");
 
 				Child child = Optional.ofNullable(em.find(Child.class, new ChildId(1L, "sinnake_child_id") )).orElseGet(Child::new);
 				
@@ -57,9 +65,11 @@ public class Identifying_IdClassMain {
 					, Optional.ofNullable(parent.getMemberId()).orElse("")
 					, Optional.ofNullable(parent.getMemberName()).orElse("") ));
 				
-				System.out.println("=========================================================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== [복합 키 - @IdClass] 식별 관계 GrandChild 조회 ===============");
+				
+				
+				print.mainStartPrint("[복합 키 - @IdClass] 식별 관계 GrandChild 조회");
 
 				GrandChild grandChild = Optional.ofNullable(em.find(GrandChild.class
 					, new GrandChildId(new ChildId(1L, "sinnake_child_id"), "sinnake_grandChild_id") )).orElseGet(GrandChild::new);
@@ -76,7 +86,7 @@ public class Identifying_IdClassMain {
 					, Optional.ofNullable(parent.getMemberId()).orElse("")
 					, Optional.ofNullable(parent.getMemberName()).orElse("") ));
 				
-				System.out.println("==============================================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

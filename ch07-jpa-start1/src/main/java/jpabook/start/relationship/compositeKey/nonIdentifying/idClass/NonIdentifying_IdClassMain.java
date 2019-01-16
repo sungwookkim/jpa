@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.relationship.compositeKey.nonIdentifying.idClass.entity.Child;
 import jpabook.start.relationship.compositeKey.nonIdentifying.idClass.entity.Parent;
 import jpabook.start.relationship.compositeKey.nonIdentifying.idClass.entity.ParentId;
@@ -11,22 +12,27 @@ import jpabook.start.relationship.compositeKey.nonIdentifying.idClass.entity.Par
 public class NonIdentifying_IdClassMain {
 
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== [복합 키 - @IdClass] 비식별 관계 매핑 저장 ===============");
+				print.mainStartPrint("[복합 키 - @IdClass] 비식별 관계 매핑 저장");
+
 				tx.begin();
 				
 				Parent parent = new Parent("id1", "id2", "sinnake");
 				em.persist(parent);
 				
 				tx.commit();
-				System.out.println("==========================================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== [복합 키 - @Idclass] 비식별 관계 매핑 조회 ===============");
+				print.mainStartPrint("[복합 키 - @IdClass] 비식별 관계 매핑 저장");
 				
 				Parent parent = em.find(Parent.class, new ParentId("id1", "id2"));
 				
@@ -34,26 +40,28 @@ public class NonIdentifying_IdClassMain {
 					, Optional.ofNullable(parent.getId1()).orElse("")
 					, Optional.ofNullable(parent.getId2()).orElse("")
 					, Optional.ofNullable(parent.getName()).orElse("") ));
-				
-				System.out.println("==========================================================================");
+
+				print.mainEndPrint();
 			})
 			.start();
 
 		new Logic(JPA_AUTO.UPDATE)
 			.logic((em, tx) -> {
-				System.out.println("=============== [복합 키 - @IdClass - 자식 클래스] 비식별 관계 매핑 저장 ===============");
+				print.mainStartPrint("[복합 키 - @IdClass - 자식 클래스] 비식별 관계 매핑 저장");
+
 				tx.begin();
 				
 				Child child = new Child("child-sinnake", new Parent("id1", "id2", "sinnake"));
 				em.persist(child);
 				
 				tx.commit();
-				System.out.println("========================================================================================");
+				
+				print.mainEndPrint();
 			}).start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== [복합 키 - @IdClass - 자식 클래스] 비식별 관계 매핑 조회 ===============");
+				print.mainStartPrint("[복합 키 - @IdClass - 자식 클래스] 비식별 관계 매핑 조회");
 				
 				Child child = Optional.ofNullable(em.createQuery("select c from CH07_COMPOSITEKEY_NONIDENTIFYING_IDCLASS_CHILD c where c.parent.id1 = :id1", Child.class)
 					.setParameter("id1", "id1")
@@ -69,8 +77,8 @@ public class NonIdentifying_IdClassMain {
 					, Optional.ofNullable(child.getName()).orElse("")
 					, Optional.ofNullable(parent).map(Parent::getId1).orElse("")
 					, Optional.ofNullable(parent).map(Parent::getId2).orElse("") ));
-								
-				System.out.println("========================================================================================");
+
+				print.mainEndPrint();
 			}).start();		
 	}
 

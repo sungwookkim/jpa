@@ -4,10 +4,11 @@ import java.util.List;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
 
-public class ParameterBindingMain extends JpqlCommon {
+public class ParameterBindingMain extends DataInit {
 
 	/*
 	 * 파라미터 바인딩
@@ -23,6 +24,8 @@ public class ParameterBindingMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 		
+		Print print = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
 				/*
@@ -30,7 +33,7 @@ public class ParameterBindingMain extends JpqlCommon {
 				 * 이름 기준 파라미터(Named parameters)는 파라미터를 이름으로 구분하는 방법이다.
 				 * 이름 기준 파라미터는 앞에 :를 사용한다.
 				 */
-				System.out.println("=============== 이름 기준 파라미터 바인딩 ===============");
+				print.mainStartPrint("이름 기준 파라미터 바인딩");
 				Member namedParamMember = em.createQuery("SELECT m FROM CH10_OOQ_MEMBER m WHERE m.userName = :userName", Member.class)
 					.setParameter("userName", "sinnake1")
 					.getSingleResult();
@@ -38,14 +41,16 @@ public class ParameterBindingMain extends JpqlCommon {
 				System.out.println("memberName : " + namedParamMember.getUserName());
 				System.out.println("memberAge : " + namedParamMember.getAge());
 				System.out.println("memberTeam : " + namedParamMember.getTeam().getName());
-				System.out.println("=========================================================");
+				print.mainEndPrint();
+
+
 				
 				/*
 				 * 위치 기준 파라미터
 				 * 위치 기준 파라미터(Positional parameters)를 사용하려면 ? 다음에 위치 값을 주면 된다.
 				 * 위치 값은 1부터 시작한다.
 				 */
-				System.out.println("=============== 위치 기준 파라미터 바인딩 ===============");
+				print.mainStartPrint("위치 기준 파라미터 바인딩");
 				List<Member> positionParamMember = em.createQuery("SELECT m FROM CH10_OOQ_MEMBER m WHERE m.team.name = ?1", Member.class)
 					.setParameter(1, "우리반")
 					.getResultList();
@@ -55,7 +60,7 @@ public class ParameterBindingMain extends JpqlCommon {
 					System.out.println("memberAge : " + p.getAge());
 					System.out.println("memberTeam : " + p.getTeam().getName());					
 				});
-				System.out.println("=========================================================");
+				print.mainEndPrint();
 			})
 			.start();		
 

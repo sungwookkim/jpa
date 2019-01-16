@@ -1,16 +1,16 @@
-package jpabook.start.objectOrientedQuery.jpql;
+package jpabook.start.objectOrientedQuery;
 
 import java.util.Arrays;
 import java.util.List;
 
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
-import jpabook.start.objectOrientedQuery.jpql.entity.Order;
-import jpabook.start.objectOrientedQuery.jpql.entity.Product;
-import jpabook.start.objectOrientedQuery.jpql.entity.Team;
-import jpabook.start.objectOrientedQuery.jpql.entity.embedded.Address;
+import jpabook.start.objectOrientedQuery.entity.Member;
+import jpabook.start.objectOrientedQuery.entity.Order;
+import jpabook.start.objectOrientedQuery.entity.Product;
+import jpabook.start.objectOrientedQuery.entity.Team;
+import jpabook.start.objectOrientedQuery.entity.embedded.Address;
 
-public class JpqlCommon {
+public class DataInit {
 
 	public static void initSave() {
 		new Logic()

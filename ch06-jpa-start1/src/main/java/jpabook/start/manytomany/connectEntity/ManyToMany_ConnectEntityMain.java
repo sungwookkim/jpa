@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.manytomany.connectEntity.entity.Member;
 import jpabook.start.manytomany.connectEntity.entity.MemberProduct;
 import jpabook.start.manytomany.connectEntity.entity.MemberProductId;
@@ -39,9 +40,12 @@ public class ManyToMany_ConnectEntityMain {
 	 */
 	public static void main(String[] args) {
 		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원, 상품 저장 ===============");				
+				print.mainStartPrint("회원, 상품 저장");
+				
 				tx.begin();
 
 				Product product = new Product("product");
@@ -114,13 +118,14 @@ public class ManyToMany_ConnectEntityMain {
 				em.persist(memberProduct14);
 
 				tx.commit();
-				System.out.println("===============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 			
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake1 회원이 구매한 모든 상품 조회 ===============");				
+				print.mainStartPrint("sinnake1 회원이 구매한 모든 상품 조회");
 				
 				Member member = Optional.ofNullable(em.createQuery("select m from CH06_MANY_TO_MANY_CONNECT_MEMBER m where m.userId = :userId", Member.class)
 					.setParameter("userId", "sinnake1")
@@ -138,14 +143,14 @@ public class ManyToMany_ConnectEntityMain {
 						, Optional.ofNullable(mp.getProduct()).map(Product::getName).orElse("")
 						, Optional.ofNullable(mp.getOrderAmount()).map(String::valueOf).orElse("") ));
 				});
-				
-				System.out.println("====================================================================");
+
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake2 회원의 product1 상품 구매내역 조회 ===============");
+				print.mainStartPrint("sinnake2 회원의 product1 상품 구매내역 조회");
 				
 				MemberProduct memberProduct = Optional.ofNullable(em.find(MemberProduct.class, new MemberProductId(3, 2)))
 						.orElseGet(MemberProduct::new);
@@ -157,7 +162,7 @@ public class ManyToMany_ConnectEntityMain {
 					, Optional.ofNullable(product.getName()).orElse("")
 					, Optional.ofNullable(memberProduct.getOrderAmount()).map(String::valueOf).orElse("") ));
 				
-				System.out.println("===========================================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

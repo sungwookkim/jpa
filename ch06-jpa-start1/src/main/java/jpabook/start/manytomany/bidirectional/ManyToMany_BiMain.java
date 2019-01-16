@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.manytomany.bidirectional.entity.Member;
 import jpabook.start.manytomany.bidirectional.entity.Product;
 
@@ -13,9 +14,12 @@ public class ManyToMany_BiMain {
 
 	public static void main(String[] args) {
 		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원, 상품 저장 ===============");
+				print.mainStartPrint("회원, 상품 저장");
+
 				tx.begin();
 				
 				Member member = new Member("sinnake", "sinnake_name");
@@ -58,13 +62,14 @@ public class ManyToMany_BiMain {
 				em.persist(product3);
 
 				tx.commit();
-				System.out.println("===============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake1 회원이 구매한 모든 상품 ===============");
+				print.mainStartPrint("sinnake1 회원이 구매한 모든 상품");
 				
 				Member member = Optional.ofNullable(em.createQuery("select m from CH06_MANY_TO_MANY_BI_MEMBER m where m.userId = :userId", Member.class)
 					.setParameter("userId", "sinnake1").getResultList() )
@@ -82,9 +87,11 @@ public class ManyToMany_BiMain {
 						, Optional.ofNullable(p.getName()).orElse("") ));
 				});
 				
-				System.out.println("================================================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== product1 상품을 구매한 모든 회원 ===============");
+				
+				
+				print.mainStartPrint("product1 상품을 구매한 모든 회원");
 
 				Product product = Optional.ofNullable(em.createQuery("select p from CH06_MANY_TO_MANY_BI_PRODUCT p where p.name = :name", Product.class)
 					.setParameter("name", "product1").getResultList() )
@@ -101,8 +108,8 @@ public class ManyToMany_BiMain {
 						, Optional.ofNullable(product.getName()).orElse("") 
 						, Optional.ofNullable(m.getUserId()).orElse("") ));
 				});
-				
-				System.out.println("================================================================");
+
+				print.mainEndPrint();
 			})
 			.start();
 	}

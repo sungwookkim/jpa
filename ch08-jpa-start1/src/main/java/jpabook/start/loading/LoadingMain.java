@@ -4,6 +4,7 @@ import java.util.Date;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.loading.entity.Member;
 import jpabook.start.loading.entity.Order;
 import jpabook.start.loading.entity.Product;
@@ -25,9 +26,13 @@ public class LoadingMain {
 	 * 연관된 엔티티를 즉시 조회한다. 하이버네이트는 가능하면 SQL 조인을 사용해서 한 번에 조회한다.
 	 */
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 즉시, 지연 로딩 저장 ===============");
+				print.mainStartPrint("즉시, 지연 로딩 저장");
+
 				tx.begin();
 				
 				Team team = new Team("JAP Team");
@@ -45,24 +50,29 @@ public class LoadingMain {
 				em.persist(order);
 								
 				tx.commit();
-				System.out.println("====================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 즉시 로딩 조회 ===============");
+				print.mainStartPrint("즉시 로딩 조회");
+
 				em.find(Member.class, 1L);
-				System.out.println("==============================================");
+
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 지연 로딩 조회 ===============");
+				print.mainStartPrint("지연 로딩 조회");
+
 				Member member = em.find(Member.class, 1L);
 				member.getOrder().get(0);
-				System.out.println("==============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();		
 	}

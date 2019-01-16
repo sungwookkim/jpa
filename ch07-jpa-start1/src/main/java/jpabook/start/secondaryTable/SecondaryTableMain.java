@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.secondaryTable.entity.Board;
 
 public class SecondaryTableMain {
@@ -16,21 +17,28 @@ public class SecondaryTableMain {
 	 * 반면 일대일 매핑은 원하는 부분만 조회할 수 있고 필요하면 함께 조회하면 된다. 
 	 */
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== SecondaryTable 매핑 저장 ===============");
+				print.mainStartPrint("SecondaryTable 매핑 저장");
+
 				tx.begin();
 				
 				em.persist(new Board("sinnake_title", "sinnake_content"));
 
 				tx.commit();
-				System.out.println("========================================================");
+
+				print.mainEndPrint();
+
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== SecondaryTable 매핑 조회 ===============");
+				print.mainStartPrint("SecondaryTable 매핑 조회");
+
 				Board board = Optional.ofNullable(em.createQuery("select b from CH07_SECONDARYTABLE b", Board.class)
 					.getResultList() )
 				.filter(b -> b.size() > 0)
@@ -41,7 +49,8 @@ public class SecondaryTableMain {
 					, Optional.ofNullable(board.getId()).orElse(-1L)
 					, Optional.ofNullable(board.getTitle()).orElse("")
 					, Optional.ofNullable(board.getContent()).orElse("") ));
-				System.out.println("========================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 	}

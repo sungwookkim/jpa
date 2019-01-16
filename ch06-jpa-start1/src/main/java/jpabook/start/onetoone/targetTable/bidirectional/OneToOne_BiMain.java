@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.onetoone.targetTable.bidirectional.entity.Locker;
 import jpabook.start.onetoone.targetTable.bidirectional.entity.Member;
 
@@ -33,6 +34,8 @@ public class OneToOne_BiMain {
 	 * https://developer.jboss.org/wiki/SomeExplanationsOnLazyLoadingone-to-one 
 	 */
 	public static void main(String[] args) {
+		Print print = new Print();
+		
 		List<Member> memberList = Arrays.asList(
 				new Member("sinnake1")
 				, new Member("sinnake2")
@@ -47,7 +50,8 @@ public class OneToOne_BiMain {
 			
 			new Logic()
 				.logic((em, tx) -> {
-					System.out.println("=============== 회원, 사물함 저장 ===============");
+					print.mainStartPrint("회원, 사물함 저장");
+
 					tx.begin();
 					
 					lockerList.stream().forEach(l -> em.persist(l));
@@ -58,13 +62,14 @@ public class OneToOne_BiMain {
 					lockerList.get(2).setMember(memberList.get(2));
 
 					tx.commit();
-					System.out.println("=================================================");
+					
+					print.mainEndPrint();
 				})
 				.start();
 			
 			new Logic(JPA_AUTO.UPDATE)
 				.commitAfter(em -> {
-					System.out.println("=============== sinnake2 회원의 사물함 조회 ===============");					
+					print.mainStartPrint("sinnake2 회원의 사물함 조회");					
 
 					Locker locker = Optional.ofNullable(em.createQuery("select l from CH06_ONE_TO_ONE_TARGET_BI_LOCKER l where l.member.userId = 'sinnake2'", Locker.class)
 						.getResultList())
@@ -76,9 +81,11 @@ public class OneToOne_BiMain {
 						, Optional.ofNullable(locker.getMember()).map(Member::getUserId).orElse("")
 						, Optional.ofNullable(locker.getId()).map(String::valueOf).orElse("") ));
 					
-					System.out.println("===========================================================");
+					print.mainEndPrint();
 					
-					System.out.println("=============== locker2를 사용하는 회원 ID 조회 ===============");					
+					
+					
+					print.mainStartPrint("locker2를 사용하는 회원 ID 조회");					
 
 					locker = Optional.ofNullable(em.createQuery("select l from CH06_ONE_TO_ONE_TARGET_BI_LOCKER l where l.name = 'locker2'", Locker.class)
 						.getResultList())
@@ -90,7 +97,7 @@ public class OneToOne_BiMain {
 						, Optional.ofNullable(locker.getMember()).map(Member::getUserId).orElse("")
 						, Optional.ofNullable(locker.getName()).orElse("") ));
 					
-					System.out.println("===============================================================");					
+					print.mainEndPrint();
 				})
 				.start();
 	}

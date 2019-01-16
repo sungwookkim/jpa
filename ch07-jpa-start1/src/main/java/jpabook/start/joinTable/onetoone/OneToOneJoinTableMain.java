@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.joinTable.onetoone.entity.Child;
 import jpabook.start.joinTable.onetoone.entity.Parent;
 
@@ -14,9 +15,13 @@ public class OneToOneJoinTableMain {
 	 * (PARENT_ID는 기본 키이므로 유니크 제약조건이 걸려있다.)
 	 */
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 일대일 조인테이블 저장 ===============");
+				print.mainStartPrint("일대일 조인테이블 저장");
+
 				tx.begin();
 				
 				Child child = new Child("sinnake_child");
@@ -26,7 +31,8 @@ public class OneToOneJoinTableMain {
 				em.persist(parent);
 
 				tx.commit();
-				System.out.println("======================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		

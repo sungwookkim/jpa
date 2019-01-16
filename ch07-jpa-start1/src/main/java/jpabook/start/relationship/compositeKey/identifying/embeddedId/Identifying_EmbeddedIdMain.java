@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.relationship.compositeKey.identifying.embeddedId.entity.Child;
 import jpabook.start.relationship.compositeKey.identifying.embeddedId.entity.ChildId;
 import jpabook.start.relationship.compositeKey.identifying.embeddedId.entity.GrandChild;
@@ -19,12 +20,15 @@ public class Identifying_EmbeddedIdMain {
 	 * @MapsId의 속성 값은 @EmbeddedId를 사용한 식별자 클래스의 기본 키 필드를 지정해야 한다. 
 	 */
 	public static void main(String[] args) {
+		Print print = new Print();
+		
 		ChildId childId = new ChildId(1L, "sinnake_child_id");
 		GrandChildId grandChildId = new GrandChildId(childId, "sinnake_grandchild_id");
 		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== [복합 키 - @EmbeddedId] 식별 관계 매핑 저장 ===============");
+				print.mainStartPrint("[복합 키 - @EmbeddedId] 식별 관계 매핑 저장");
+				
 				tx.begin();
 				
 				Parent parent = new Parent("sinnake_parent_id", "sinnake_parent_name");
@@ -36,13 +40,14 @@ public class Identifying_EmbeddedIdMain {
 				em.persist(grandChild);
 				
 				tx.commit();
-				System.out.println("===========================================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== [복합 키 - @EmbeddedId] 식별 관계 Parent 조회 ===============");
+				print.mainStartPrint("[복합 키 - @EmbeddedId] 식별 관계 Parent 조회");
 				
 				Parent parent = Optional.ofNullable(em.find(Parent.class, 1L)).orElseGet(Parent::new);
 
@@ -50,10 +55,12 @@ public class Identifying_EmbeddedIdMain {
 					, Optional.ofNullable(parent.getId()).map(String::valueOf).orElse("")
 					, Optional.ofNullable(parent.getMemberId()).orElse("")
 					, Optional.ofNullable(parent.getMemberName()).orElse("") ));
-				
-				System.out.println("=============================================================================");
 
-				System.out.println("=============== [복합 키 - @EmbeddedId] 식별 관계 Child 조회 ===============");
+				print.mainEndPrint();
+
+
+				
+				print.mainStartPrint("[복합 키 - @EmbeddedId] 식별 관계 Child 조회");
 
 				Child child = Optional.ofNullable(em.find(Child.class, childId)).orElseGet(Child::new);
 				
@@ -66,9 +73,11 @@ public class Identifying_EmbeddedIdMain {
 					, Optional.ofNullable(parent.getMemberId()).orElse("")
 					, Optional.ofNullable(parent.getMemberName()).orElse("") ));
 
-				System.out.println("============================================================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== [복합 키 - @EmbeddedId] 식별 관계 GrandChild 조회 ===============");
+				
+				
+				print.mainStartPrint("[복합 키 - @EmbeddedId] 식별 관계 GrandChild 조회");
 
 				GrandChild grandChild = Optional.ofNullable(em.find(GrandChild.class, grandChildId)).orElseGet(GrandChild::new);
 				
@@ -84,7 +93,7 @@ public class Identifying_EmbeddedIdMain {
 					, Optional.ofNullable(parent.getMemberId()).orElse("")
 					, Optional.ofNullable(parent.getMemberName()).orElse("") ));
 				
-				System.out.println("=================================================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

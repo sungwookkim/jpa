@@ -1,7 +1,7 @@
 package jpabook.start.objectOrientedQuery.jpql.projection;
 
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
-import jpabook.start.objectOrientedQuery.jpql.entity.Product;
+import jpabook.start.objectOrientedQuery.entity.Member;
+import jpabook.start.objectOrientedQuery.entity.Product;
 
 public class OrderDTO {
 	private Member member;

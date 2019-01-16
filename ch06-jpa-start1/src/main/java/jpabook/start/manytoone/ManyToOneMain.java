@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.manytoone.entity.Member;
 import jpabook.start.manytoone.entity.Team;
 
@@ -31,6 +32,8 @@ public class ManyToOneMain {
 	 * 
 	 */
 	public static void main(String[] args) {
+		Print print = new Print();
+				
 		List<Team> teamList = Arrays.asList(
 			new Team("team1")
 			, new Team("team2")
@@ -46,7 +49,8 @@ public class ManyToOneMain {
 		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 팀, 회원 저장 ===============");
+				print.mainStartPrint(" 팀, 회원 저장");
+				
 				tx.begin();			
 				
 				memberList.get(0).setTeam(teamList.get(0));
@@ -59,13 +63,14 @@ public class ManyToOneMain {
 				memberList.stream().forEach(m -> em.persist(m));
 
 				tx.commit();
-				System.out.println("=============================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== sinnake2 회원의 팀 정보 ===============");
+				print.mainStartPrint("sinnake2 회원의 팀 정보");
 				
 				Member member = Optional.ofNullable(em.createQuery("select m from CH06_MANY_TO_ONE_MEMBER m where m.memberId = 'sinnake2'", Member.class)
 							.getResultList())
@@ -78,9 +83,11 @@ public class ManyToOneMain {
 						+ ", 회원 이름 : " + Optional.ofNullable(member.getUsername()).orElse("")
 						+ ", 팀이름 : " + Optional.ofNullable(team.getName()).orElse(""));
 				
-				System.out.println("=======================================================");
+				print.mainEndPrint();
+				
+				
 
-				System.out.println("=============== 팀이 team3인 모든 회원 ===============");
+				print.mainStartPrint("팀이 team3인 모든 회원");
 
 				List<Team> teams = Optional.ofNullable(em.createQuery("select t from CH06_MANY_TO_ONE_TEAM t where t.name = 'team3'", Team.class)
 					.getResultList())
@@ -96,7 +103,7 @@ public class ManyToOneMain {
 						});
 					});
 				
-				System.out.println("======================================================");
+				print.mainEndPrint();
 			})
 			.start();
 

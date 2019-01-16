@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.inheritanceMapping.tablePerConcreteClassStrategy.entity.Album;
 import jpabook.start.inheritanceMapping.tablePerConcreteClassStrategy.entity.Book;
 import jpabook.start.inheritanceMapping.tablePerConcreteClassStrategy.entity.Movie;
@@ -31,9 +32,12 @@ public class TablePerConcreteClassStrategyMain {
 	 */
 	public static void main(String[] args) {
 
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== [table_per_concrete_class strategy] 앨범, 영화, 책 저장 ===============");				
+				print.mainStartPrint("[table_per_concrete_class strategy] 앨범, 영화, 책 저장");				
+
 				tx.begin();
 
 				em.persist(new Album("sinnakeAlbum", "sinnake", 10_000));
@@ -41,10 +45,11 @@ public class TablePerConcreteClassStrategyMain {
 				em.persist(new Book("sinnakeAuthor", "sinnakeISBN", "sinnake", 100_000_000));
 				
 				tx.commit();
-				System.out.println("=======================================================================================");
+				
+				print.mainEndPrint();
 			})
 			.commitAfter(em -> {
-				System.out.println("=============== [table_per_concrete_class strategy] 앨범 조회 ===============");
+				print.mainStartPrint("[table_per_concrete_class strategy] 앨범 조회");
 
 				List<Album> albums = Optional.ofNullable(em.createQuery("select a from CH07_TABLE_PER_CONCRETE_CLASS_STRATEGY_ALBUM a where a.artist = :artist", Album.class)
 					.setParameter("artist", "sinnakeAlbum")
@@ -60,9 +65,11 @@ public class TablePerConcreteClassStrategyMain {
 						, Optional.ofNullable(a.getPrice()).map(String::valueOf).orElse("") ));
 				});
 				
-				System.out.println("=============================================================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== [table_per_concrete_class strategy] 영화 조회 ===============");
+				
+				
+				print.mainStartPrint("[table_per_concrete_class strategy] 영화 조회");
 
 				List<Movie> movies = Optional.ofNullable(em.createQuery("select m from CH07_TABLE_PER_CONCRETE_CLASS_STRATEGY_MOVIE m where m.director = :director", Movie.class)
 					.setParameter("director", "sinnakeDirector")
@@ -78,10 +85,12 @@ public class TablePerConcreteClassStrategyMain {
 						, Optional.ofNullable(m.getName()).orElse("")
 						, Optional.ofNullable(m.getPrice()).map(String::valueOf).orElse("") ));
 				});
+
+				print.mainEndPrint();
 				
-				System.out.println("=============================================================================");
 				
-				System.out.println("=============== [table_per_concrete_class strategy] 책 조회 ===============");
+				
+				print.mainStartPrint("[table_per_concrete_class strategy] 책 조회");
 
 				List<Book> books = Optional.ofNullable(em.createQuery("select b from CH07_TABLE_PER_CONCRETE_CLASS_STRATEGY_BOOK b where b.author = :author", Book.class)
 					.setParameter("author", "sinnakeAuthor")
@@ -98,7 +107,7 @@ public class TablePerConcreteClassStrategyMain {
 						, Optional.ofNullable(b.getPrice()).map(String::valueOf).orElse("") ));
 				});
 				
-				System.out.println("===========================================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

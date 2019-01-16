@@ -2,6 +2,7 @@ package jpabook.start.cascade;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.cascade.entity.Child;
 import jpabook.start.cascade.entity.Parent;
 
@@ -30,9 +31,13 @@ public class CascadeMain {
 	 * 전이가 발생한다. 
 	 */
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) ->{
-				System.out.println("=============== 영속성 전이 저장 ===============");
+				print.mainStartPrint("영속성 전이 저장");
+
 				tx.begin();
 				/*
 				 * "JPA에서 엔티티를 저장할 때 연관된 모든 엔티티는 영속 상태여야 한다."
@@ -63,13 +68,15 @@ public class CascadeMain {
 				
 				em.persist(parent);
 				tx.commit();
-				System.out.println("================================================");
+				
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.logic((em, tx) -> {
-				System.out.println("=============== 영속성 전이 삭제 ===============");
+				print.mainStartPrint("영속성 전이 삭제");
+
 				tx.begin();
 				/*
 				 * 영속성 전이 상태가 아닌 상황에서는 부모와 자식 테이블의 데이터를 삭제 하기 위해서는 아래와 같이 삭제 해야 한다.
@@ -92,7 +99,8 @@ public class CascadeMain {
 				em.remove(parent);
 				
 				tx.commit();
-				System.out.println("================================================");
+
+				print.mainEndPrint();
 			})
 			.start();
 		

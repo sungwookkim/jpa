@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.inheritanceMapping.joinedStrategy.entity.Album;
 import jpabook.start.inheritanceMapping.joinedStrategy.entity.Book;
 import jpabook.start.inheritanceMapping.joinedStrategy.entity.Movie;
@@ -37,9 +38,12 @@ public class JoinedStrategyMain {
 	 */
 	public static void main(String[] args) {
 
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== [joined strategy] 앨범, 영화, 책 저장 ===============");				
+				print.mainStartPrint("[joined strategy] 앨범, 영화, 책 저장");
+				
 				tx.begin();
 
 				em.persist( new Album("sinnakeAlbum", "sinnake", 10_000));
@@ -47,10 +51,11 @@ public class JoinedStrategyMain {
 				em.persist(new Book("sinnakeAuthor", "sinnakeISBN", "sinnake", 100_000_000));
 				
 				tx.commit();
-				System.out.println("=====================================================================");
+				
+				print.mainEndPrint();
 			})
 			.commitAfter(em -> {
-				System.out.println("=============== [joined strategy] 앨범 조회 ===============");
+				print.mainStartPrint("[joined strategy] 앨범 조회");
 
 				List<Album> albums = Optional.ofNullable(em.createQuery("select a from CH07_JOINED_STRATEGY_ALBUM a where a.artist = :artist", Album.class)
 					.setParameter("artist", "sinnakeAlbum")
@@ -66,9 +71,10 @@ public class JoinedStrategyMain {
 						, Optional.ofNullable(a.getPrice()).map(String::valueOf).orElse("") ));
 				});
 				
-				System.out.println("===========================================================");
-				
-				System.out.println("=============== [joined strategy] 영화 조회 ===============");
+				print.mainEndPrint();
+
+
+				print.mainStartPrint("[joined strategy] 영화 조회");
 
 				List<Movie> movies = Optional.ofNullable(em.createQuery("select m from CH07_JOINED_STRATEGY_MOVIE m where m.director = :director", Movie.class)
 					.setParameter("director", "sinnakeDirector")
@@ -85,9 +91,11 @@ public class JoinedStrategyMain {
 						, Optional.ofNullable(m.getPrice()).map(String::valueOf).orElse("") ));
 				});
 				
-				System.out.println("===========================================================");
+				print.mainEndPrint();
+
+
 				
-				System.out.println("=============== [joined strategy] 책 조회 ===============");
+				print.mainStartPrint("[joined strategy] 책 조회");
 
 				List<Book> books = Optional.ofNullable(em.createQuery("select b from CH07_JOINED_STRATEGY_BOOK b where b.author = :author", Book.class)
 					.setParameter("author", "sinnakeAuthor")
@@ -104,7 +112,7 @@ public class JoinedStrategyMain {
 						, Optional.ofNullable(b.getPrice()).map(String::valueOf).orElse("") ));
 				});
 				
-				System.out.println("===========================================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

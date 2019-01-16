@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import jpabook.start.valueType.embeddedMapping.entity.Member;
 import jpabook.start.valueType.embeddedMapping.entity.PhoneServiceProvider;
 import jpabook.start.valueType.embeddedMapping.entity.embedded.Address;
@@ -13,9 +14,12 @@ import jpabook.start.valueType.embeddedMapping.entity.embedded.ZipCode;
 public class EmbeddedMappingMain {
 
 	public static void main(String[] args) {
+		
+		Print print = new Print();
+		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 임베디드 타입과 연관관계 저장 ===============");
+				print.mainStartPrint("임베디드 타입과 연관관계 저장");
 				tx.begin();
 				
 				ZipCode zipCode = new ZipCode("sinnake zip", "sinnake plusFour");
@@ -32,13 +36,13 @@ public class EmbeddedMappingMain {
 				em.persist(member);
 				
 				tx.commit();
-				System.out.println("=============================================================");
+				print.mainEndPrint();
 			})
 			.start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 임베디드 타입과 연관관계 조회 ===============");
+				print.mainStartPrint("임베디드 타입과 연관관계 조회");
 				Member member = Optional.ofNullable(em.find(Member.class, 1L)).orElseGet(Member::new) ;
 				System.out.println(String.format("memberId : %s"
 					, Optional.ofNullable(member.getId()).orElse(-1L) ));
@@ -74,7 +78,8 @@ public class EmbeddedMappingMain {
 					.orElseGet(PhoneServiceProvider::new);
 				System.out.println(String.format("phoneServiceProviderName : %s"
 					, Optional.ofNullable(phoneServiceProvider.getName()).orElse("") ));
-				System.out.println("=============================================================");
+
+				print.mainEndPrint();
 			})
 			.start();
 

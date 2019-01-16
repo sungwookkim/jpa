@@ -4,11 +4,12 @@ import java.util.List;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
-import jpabook.start.objectOrientedQuery.jpql.entity.Team;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
+import jpabook.start.objectOrientedQuery.entity.Team;
 
-public class FetchJoinMain extends JpqlCommon {
+public class FetchJoinMain extends DataInit {
 	/*
 	 * 페치 조인
 	 * 
@@ -19,9 +20,13 @@ public class FetchJoinMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 		
+		Print print = new Print();
+		Print subPrint = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 페치 조인 ===============");
+				print.mainStartPrint("페치 조인");
+
 				/*
 				 * 엔티티 페치 조인
 				 * 
@@ -33,7 +38,7 @@ public class FetchJoinMain extends JpqlCommon {
 				 * 그리고 프록시가 아닌 실제 엔티티이므로 회원 엔티티가 영속성 컨텍스트에서 분리되어
 				 * 준영속 상태가 되어도 연관된 팀을 조회할 수 있다.
 				 */
-				System.out.println("--------------- 엔티티 페치 조인 ---------------");
+				subPrint.subStartPrint("엔티티 페치 조인");
 				List<Member> entityFetchJoin = em.createQuery("SELECT m"
 						+ " FROM CH10_OOQ_MEMBER m JOIN FETCH m.team", Member.class)
 				.getResultList();
@@ -45,7 +50,9 @@ public class FetchJoinMain extends JpqlCommon {
 						, e.getAge()
 						, e.getTeam().getName() ));
 				});
-				System.out.println("------------------------------------------------");
+				subPrint.subEndPrint();
+
+				
 				
 				/*
 				 * 컬렉션 페치 조인
@@ -63,7 +70,7 @@ public class FetchJoinMain extends JpqlCommon {
 				 * 참고
 				 * 일대다 조인은 결과가 증가할 수 있지만 일대일, 다대일 조인은 결과가 증가하지 않는다.
 				 */
-				System.out.println("--------------- 컬렉션 페치 조인 ---------------");
+				subPrint.subStartPrint("컬렉션 페치 조인");
 				List<Team> collectionFetchJoinTeam = em.createQuery("SELECT t"
 					+ " FROM CH10_OOQ_TEAM t JOIN FETCH t.member"
 					+ " WHERE t.name = :teamName", Team.class)
@@ -77,7 +84,9 @@ public class FetchJoinMain extends JpqlCommon {
 						System.out.println(String.format("-> userName", m.getUserName()) + ", " + m);
 					});
 				});
-				System.out.println("------------------------------------------------");
+				subPrint.subEndPrint();
+
+				
 				
 				/*
 				 * 페치 조인과 DISTINCT
@@ -88,7 +97,7 @@ public class FetchJoinMain extends JpqlCommon {
 				 * 위 컬렉션 페치 조인은 '우리반'이 중복으로 조회된다. 다음처럼 DISTINCT를 추가해보자.
 				 * 추가하면 팀 엔티티의 중복이 제거된 '우리반'이 하나만 조회된다.
 				 */
-				System.out.println("--------------- 페치 조인과 DISTINCT ---------------");
+				subPrint.subStartPrint("페치 조인과 DISTINCT");
 				collectionFetchJoinTeam = em.createQuery("SELECT DISTINCT t"
 					+ " FROM CH10_OOQ_TEAM t JOIN FETCH t.member"
 					+ " WHERE t.name = :teamName", Team.class)
@@ -102,9 +111,9 @@ public class FetchJoinMain extends JpqlCommon {
 						System.out.println(String.format("-> userName", m.getUserName()) + ", " + m);
 					});
 				});
-				System.out.println("----------------------------------------------------");
+				subPrint.subEndPrint();
 				
-				System.out.println("=========================================");
+				print.mainEndPrint();
 			})
 			.start();
 		

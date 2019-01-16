@@ -4,10 +4,11 @@ import java.util.List;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
 
-public class SetOrderMain extends JpqlCommon {
+public class SetOrderMain extends DataInit {
 
 	/*
 	 * 집합과 정렬
@@ -37,9 +38,11 @@ public class SetOrderMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 		
+		Print print = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== GROUP BY, HAVING ===============");
+				print.mainStartPrint("GROUP BY, HAVING");
 				// 팀 이름을 기준으로 그룹별로 묶어서 통계 데이터 조회.
 				List<SetDTO> setDto = em.createQuery("SELECT "
 					+ "new jpabook.start.objectOrientedQuery.jpql.setOrder.SetDTO"
@@ -79,9 +82,11 @@ public class SetOrderMain extends JpqlCommon {
 						, s.getSum()
 						, s.getMin() ));
 				});
-				System.out.println("================================================");
+				print.mainEndPrint();
+
 				
-				System.out.println("=============== Order by ===============");
+				
+				print.mainStartPrint("Order by");				
 				/*
 				 * ORDER BY는 결과를 정렬하 때 사용한다. 다음은 나이를 기준으로 내림차순으로 정렬하고
 				 * 나이가 같으면 이름을 기준으로 오름차순으로 정렬한다.
@@ -109,7 +114,7 @@ public class SetOrderMain extends JpqlCommon {
 						, (String)q[0]
 						, (Long)q[1] ));
 				});
-				System.out.println("========================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

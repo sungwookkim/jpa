@@ -2,10 +2,11 @@ package jpabook.start.objectOrientedQuery.jpql.subQuery;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
-import jpabook.start.objectOrientedQuery.jpql.JpqlCommon;
-import jpabook.start.objectOrientedQuery.jpql.entity.Member;
+import common.util.Print;
+import jpabook.start.objectOrientedQuery.DataInit;
+import jpabook.start.objectOrientedQuery.entity.Member;
 
-public class SubQueryMain extends JpqlCommon {
+public class SubQueryMain extends DataInit {
 
 	/*
 	 * 서브 쿼리
@@ -20,11 +21,14 @@ public class SubQueryMain extends JpqlCommon {
 	public static void main(String[] args) {
 		initSave();
 		
+		Print print = new Print();
+		Print subPrint = new Print();
+		
 		new Logic(JPA_AUTO.UPDATE)
-			.commitAfter(em -> {			
-				System.out.println("=============== 서브 쿼리 ===============");
+			.commitAfter(em -> {
+				print.mainStartPrint("서브 쿼리");
 				
-				System.out.println("--------------- 나이가 평균보다 많은 회원 ---------------");
+				subPrint.subStartPrint("나이가 평균보다 많은 회원");
 				em.createQuery("SELECT m"
 					+ " FROM CH10_OOQ_MEMBER m"
 					+ " WHERE m.age > (SELECT avg(m2.age) FROM CH10_OOQ_MEMBER m2)", Member.class)
@@ -34,9 +38,11 @@ public class SubQueryMain extends JpqlCommon {
 						, m.getUserName()
 						, m.getAge() ));
 				});
-				System.out.println("---------------------------------------------------------");
+				subPrint.subEndPrint();
 				
-				System.out.println("--------------- 한 건이라도 주문한 고객 ---------------");
+				
+				
+				subPrint.subStartPrint("한 건이라도 주문한 고객");
 				em.createQuery("SELECT m"
 					+ " FROM CH10_OOQ_MEMBER m"
 					+ " WHERE (SELECT COUNT(o) FROM CH10_OOQ_ORDER o WHERE m = o.member) > 0", Member.class)
@@ -46,9 +52,11 @@ public class SubQueryMain extends JpqlCommon {
 						, m.getUserName()
 						, m.getAge() ));
 				});;
-				System.out.println("-------------------------------------------------------");
+				subPrint.subEndPrint();
 				
-				System.out.println("--------------- [컬렉션 size 사용] 한 건이라도 주문한 고객 ---------------");
+				
+				
+				subPrint.subStartPrint("[컬렉션 size 사용] 한 건이라도 주문한 고객");
 				em.createQuery("SELECT m"
 					+ " FROM CH10_OOQ_MEMBER m"
 					+ " WHERE m.order.size > 0", Member.class)
@@ -58,9 +66,9 @@ public class SubQueryMain extends JpqlCommon {
 						, m.getUserName()
 						, m.getAge() ));
 				});;
-				System.out.println("--------------------------------------------------------------------------");
+				subPrint.subEndPrint();
 				
-				System.out.println("=========================================");
+				print.mainEndPrint();
 			})
 			.start();
 	}

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import common.util.JPA_AUTO;
 import common.util.Logic;
+import common.util.Print;
 import common.util.valueString.impl.JSON;
 import model2.entity.Item;
 import model2.entity.Member;
@@ -19,6 +20,9 @@ import model2.entity.OrderStatus;
 public class Model2Main {
 
 	public static void main(String[] args) {
+		Print print = new Print();
+		Print subPrint = new Print();
+		
 		List<Member> memberList = Arrays.asList(
 				new Member("신나게", "서울", "길거리", "000-000")
 				, new Member("쉰나게", "지방", "골목길", "100-100")
@@ -34,7 +38,7 @@ public class Model2Main {
 		
 		new Logic()
 			.logic((em, tx) -> {
-				System.out.println("=============== 회원, 물품, 주문 저장 ===============");
+				print.mainStartPrint("회원, 물품, 주문 저장");
 				tx.begin();
 
 				/*
@@ -82,27 +86,32 @@ public class Model2Main {
 					});
 
 				tx.commit();
-				System.out.println("=====================================================");
+				
+				print.mainEndPrint();
 			}).start();
 		
 		new Logic(JPA_AUTO.UPDATE)
 			.commitAfter(em -> {
-				System.out.println("=============== 주문번호가 5인 회원의 모든 주문내역 확인 ===============");				
+				print.mainStartPrint("주문번호가 5인 회원의 모든 주문내역 확인");
+				
 				Order order = em.find(Order.class, new Long(5));
 				order.getMember().getOrder().stream().forEach(o -> {
 					System.out.println("이름 : " + o.getMember().getName() + ", 주문번호 : " + o.getOrderId());
 
-					System.out.println("--------------- 주문 물품 ---------------");
+					subPrint.subStartPrint("주문 물품");
 					o.getOrderItem().forEach(orderItem -> {
 						System.out.println("갯수 : " + orderItem.getCount());
 						System.out.println("가격 : " + orderItem.getOrderPrice());
 						System.out.println(JSON.valueString(orderItem.getItem()) );
 					});
-					System.out.println("-----------------------------------------");
+					subPrint.subEndPrint();
 				});
-				System.out.println("========================================================================");
+				print.mainEndPrint();
 				
-				System.out.println("=============== 컴퓨터를 주문한 모든 회원 ===============");
+				
+				
+				print.mainStartPrint("컴퓨터를 주문한 모든 회원");
+				
 				List<Member> members = Optional.ofNullable(em.createQuery("select i from CH05_MODEL2_ITEM i where i.name = '컴퓨터'", Item.class)
 						.getResultList())
 					.filter(items -> items.size() > 0)
@@ -118,9 +127,13 @@ public class Model2Main {
 					.distinct()
 					.collect(Collectors.toList())
 					.forEach(m -> System.out.println(m.getName()));
-				System.out.println("=========================================================");
 				
-				System.out.println("=============== 신나게 회원의 구매한 모든 물품 ===============");
+				print.mainEndPrint();
+				
+				
+				
+				print.mainStartPrint("신나게 회원의 구매한 모든 물품");
+				
 				em.find(Member.class, new Long(1))
 					.getOrder().stream().forEach(o -> {
 						System.out.println("주문자 : " + o.getMember().getName() + ", 주문번호 : " + o.getOrderId());
@@ -132,8 +145,8 @@ public class Model2Main {
 								+ ", 물품명 : " + oi.getItem().getName());
 						});
 					});
-				System.out.println("==============================================================");
-
+				
+				print.mainEndPrint();
 			})
 			.start();
 	}
