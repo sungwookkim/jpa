@@ -4,7 +4,7 @@
 		<mapping-file>META-INF/ormMember.xml</mapping-file>
 
 		<properties>
-			<property name="hibernate.dialect" value="jpabook.start.objectOrientedQuery.jpql.polyQuery.Myh2Dialect"/>
+			<property name="hibernate.dialect" value="jpabook.start.objectOrientedQuery.Myh2Dialect"/>
 		</properties>
 	</persistence-unit>
 </persistence>

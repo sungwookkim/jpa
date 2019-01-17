@@ -33,9 +33,11 @@ public class CriteriaParamDefinition extends DataInit {
 				cq.select(cb.tuple(
 					m.alias("m")
 				))
+				// cb.parameter(타입, 파라미터 이름) 메소드를 사용해서 파라미터를 정의.
 				.where(cb.equal(m.get("userName"), cb.parameter(String.class, "userNameParam")));
 				
 				em.createQuery(cq)
+					// .setParameter("userNameParam", "sinnake1")을 사용해서 해당 파라미터에 사용할 값을 바인딩.
 					.setParameter("userNameParam", "sinnake1")
 					.getResultList().stream().forEach(t -> {
 						Member member = t.get("m", Member.class);

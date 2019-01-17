@@ -107,7 +107,7 @@ public class PolyQuery extends DataInit {
 				 * 
 				 * persistence.xml 파일에 방언을 아래와 같이 등록해야 한다.
 				 * <properties>
-				 * 		<property name="hibernate.dialect" value="jpabook.start.objectOrientedQuery.jpql.polyQuery.Myh2Dialect"/>
+				 * 		<property name="hibernate.dialect" value="jpabook.start.objectOrientedQuery.Myh2Dialect"/>
 				 * </properties>
 				 */
 				subPrint.subStartPrint("사용자 정의 함수 호출(JPA2.1)");

@@ -1,0 +1,156 @@
+Expression의 메소드
+	함수명 : isNull()
+	JPQL : IS NULL
+	
+	함수명 : isNotNull()
+	JPQL : IS NOT NULL
+	
+	함수명 : in()
+	JPQL : IN
+	
+	예 
+		m.get("userName").isNull();
+		여기서 m은 Root 객체를 뜻한다.
+
+JPQL에서 사용하는 함수 대부분은 Criteriabuilder에 정의되어 있다.
+	조건 함수
+		함수명 : and() 
+		JPQL : and
+
+		함수명 : or()
+		JPQL : or
+		
+		함수명 : not()
+		JPQL : not
+		
+		함수명 : equal(), notEqual()
+		JPQL : =, <>
+		
+		함수명 : lt(), lessThan()
+		JPQL : <
+		
+		함수명 : le(), LessThanOrEqualTo() 
+		JPQL : <=
+		
+		함수명 : gt(), greaterThan()
+		JPQL : >
+		
+		함수명 : ge(), greateThanOrEqualTo() 
+		JPQL : >=
+		
+		함수명 : between()
+		JPQL : between
+		
+		함수명 : like(), notLike()
+		JPQL : like, not like
+		
+		함수명 : isTrue(), isFalse 
+		JPQL : is true, is false
+		
+		함수명 : in(), not(in())
+		JPQL : in, not(in())
+		
+		함수명 : exists(), not(exists())
+		JPQL : exists, not exists
+		
+		함수명 : isNull(), isNotNull()
+		JPQL : is null, is not null
+		
+		함수명 : isEmpty(), isNotEmpty()
+		JPQL : is empty, is not empty
+		
+		함수명 : isMember(), isNotMember()
+		JPQL : member of, not member of
+	
+	스칼라와 기타 함수
+		함수명 : sum()
+		JPQL : +
+		
+		함수명 : neg(), diff() 
+		JPQL : -
+		
+		함수명 : prod()
+		JPQL :  *
+		
+		함수명 : quot()
+		JPQL : /
+		
+		함수명 : all() 
+		JPQL : all
+		
+		함수명 : any()
+		JPQL : any
+		
+		함수명 : some()
+		JPQL : some
+		
+		함수명 : abs()
+		JPQL : abs
+		
+		함수명 : sqrt()
+		JPQL : sqrt
+		
+		함수명 : mod()
+		JPQL : mod
+		
+		함수명 : size()
+		JPQL : size
+		
+		함수명 : length()
+		JPQL : length
+		
+		함수명 : locate()
+		JPQL : locate
+		
+		함수명 : concat()
+		JPQL : concat
+		
+		함수명 : upper()
+		JPQL : upper
+		
+		함수명 : lower()
+		JPQL : lower
+		
+		함수명 : substring()
+		JPQL : substring
+		
+		함수명 : trim()
+		JPQL : trim
+		
+		함수명 : currentDate()
+		JPQL : current_date
+		
+		함수명 : currentTime()
+		JPQL : current_time
+		
+		함수명 : currentTimestamp()
+		JPQL : current_timestamp
+		
+	집합 함수
+		함수명 : avg() 
+		JPQL : avg
+		
+		함수명 : max(), greatest()
+		JPQL : max
+		
+		함수명 : min(), least()
+		JPQL : min
+		
+		함수명 : sum(), sumAsLong(), sumAsDouble()
+		JPQL : sum
+		
+		함수명 : count()
+		JPQL : count
+		
+		함수명 : countDistinct()
+		JPQL : count distinct
+		
+	분기 함수
+		함수명 : nullif()
+		JPQL : nullif
+		
+		함수명 : coalesce()
+		JPQL : coalesce
+		
+		함수명 : selectCase()
+		JPQL : case
