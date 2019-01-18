@@ -60,6 +60,7 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.9.8</version>
 		</dependency>
+		
 	</dependencies>
   
   	<build>
@@ -90,8 +91,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
@@ -104,7 +105,8 @@
                 <configuration>
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
-            </plugin>  
+            </plugin>
+
 		</plugins>
     </build>
     
@@ -113,10 +115,10 @@
 	    <module>ch04-jpa-start2</module>
 	    <module>ch05-jpa-start1</module>
 	    <module>ch06-jpa-start1</module>
-    <module>ch07-jpa-start1</module>
-    <module>ch08-jpa-start1</module>
-    <module>ch09-jpa-start1</module>
-    <module>ch10-jpa-start1</module>
+		<module>ch07-jpa-start1</module>
+		<module>ch08-jpa-start1</module>
+		<module>ch09-jpa-start1</module>
+		<module>ch10-jpa-start1</module>
   </modules>
   
 </project>
