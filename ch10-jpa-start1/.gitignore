@@ -3,7 +3,10 @@ bin/
 /.settings
 /target
 target/
+/.apt_generated
+.apt_generated/
 *.class
 *.log
 .classpath
 .project
+.factorypath
