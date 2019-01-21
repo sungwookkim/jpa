@@ -1,0 +1,16 @@
+JPA Criteria는 문자가 아닌 코드로 JPQL을 작성하므로 문법 오류를 컴파일 단계에서
+잡을 수 있고 IDE 자동완성 기능의 도움을 받을 수 있는 등 여러 가지 장점이 있다.
+하지만 Crieria의 큰 단점은 너무 복잡하고 어렵다는 것이다. 작성된 코드를 보면
+그 복잡성으로 인해 어떤 JPQL이 생성될지 파악하기가 쉽지 않다. 쿼리를 문자가 아닌
+코드로 작성해도, 쉽고 간결하며 그 모양도 쿼리와 비슷하게 개발 할 수 있는 프로젝트가
+바로 QueryDSL이다. Query DSL도 Criteria처럼JPQL 빌더 역할을 하는데 JPA Criteria를 
+대처할 수 있다.
+QueryDSL은 오픈소스 프로젝트다. 처음에는 HQL(하이버네이트 쿼리언어)을 코드를
+작성할 수 있도록 해주는 프로젝트로 시작해서 지금은 JPA, JDO, JDBC, Lucence,
+Hibernate Search, 몽고 DB, 자바 컬렉션 등을 다양하게 지원한다. 참고로 Query DSL은
+이름 그대로 쿼리 즉 데이터를 조회하는 데 기능이 특화되어 있다.
+
+참고
+QueryDSL은 아래 링크에서 번역된 공식 한국어 문서를 제공한다.
+현재 최근 마지막 번역은 4.0.1까지이다.
+http://querydsl.com/static/querydsl/4.0.1/reference/ko-KR/html_single/

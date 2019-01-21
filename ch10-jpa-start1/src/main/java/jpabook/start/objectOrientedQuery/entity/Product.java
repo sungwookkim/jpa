@@ -26,7 +26,7 @@ public class Product {
 	@Column(name = "PRODUCT_ID")
 	private long id;
 	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<Order> order = new ArrayList<>(); 
 	
 	private String name;

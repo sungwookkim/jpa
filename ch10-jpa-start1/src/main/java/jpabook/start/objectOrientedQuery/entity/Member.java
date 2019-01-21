@@ -46,11 +46,11 @@ public class Member {
 	@Column(name = "MEMBER_ID")
 	private long id;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEAM_ID", nullable = false)
 	private Team team;
 	
-	@OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Order> order = new ArrayList<>();
 	
 	private String userName;
