@@ -16,8 +16,8 @@ public class GrandChild {
 	@MapsId("childId")
 	@ManyToOne
 	@JoinColumns({
-		@JoinColumn(name = "PARENT_ID")
-		, @JoinColumn(name = "CHILD_ID")
+		@JoinColumn(name = "CHILD_ID")
+		, @JoinColumn(name = "PARENT_ID")
 	})
 	private Child childId;
 	
