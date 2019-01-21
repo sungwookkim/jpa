@@ -44,5 +44,4 @@ public class QueryDSLDelegateMethodsMain extends DataInit {
 			})
 			.start();
 	}
-
 }
