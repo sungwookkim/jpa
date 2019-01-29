@@ -80,6 +80,5 @@ public class AccessMain {
 					.getResultStream().forEach(m -> System.out.println("access complex member = " + m));				
 			})
 			.start();
-		
 	}
 }

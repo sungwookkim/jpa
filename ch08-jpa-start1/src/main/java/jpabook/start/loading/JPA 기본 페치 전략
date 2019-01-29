@@ -1,5 +1,5 @@
 fetch 속성의 기본 설정 값은 다음과 같다.
-- @ManyToMany, @OneToOne : 즉시 로딩(FetchType.EAGER)
+- @ManyToOne, @OneToOne : 즉시 로딩(FetchType.EAGER)
 - @OneToMany, @ManyToMany : 지연 로딩(FetchType.LAZY)
 
 JPA의 기본 페치 전략은 연관된 엔티티가 하나면 즉시 로딩을, 컬렉션이면 지연 로딩을 사용한다.

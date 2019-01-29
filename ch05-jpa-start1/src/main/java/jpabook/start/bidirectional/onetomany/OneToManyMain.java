@@ -43,11 +43,11 @@ public class OneToManyMain {
 				print.mainStartPrint("일대다 방향으로 객체 그래프 탐색");
 				
 				Team team = em.find(Team.class, "team1");
-
+				
 				team.getMember().stream().forEach(m -> {
 					System.out.println("team인 회원명 : " + m.getUsername() + ", 팀명 : " + team.getName());
 				});
-				
+
 				print.mainEndPrint();				
 			})
 			.start();

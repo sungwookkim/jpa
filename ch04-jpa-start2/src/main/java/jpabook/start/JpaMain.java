@@ -3,7 +3,6 @@ package jpabook.start;
 import java.util.Date;
 
 import common.util.Logic;
-import common.util.Print;
 import jpabook.start.entity.Member;
 import jpabook.start.entity.RoleType;
 
