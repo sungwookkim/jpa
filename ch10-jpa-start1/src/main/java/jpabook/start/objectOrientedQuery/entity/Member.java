@@ -84,6 +84,8 @@ public class Member {
 			this.order.add(order);
 		}
 		
+		this.order.add(order);
+		
 		if(order.getMember() != this) {
 			order.setMember(this);
 		}

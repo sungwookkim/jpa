@@ -50,6 +50,8 @@ public class DataInit {
 			/*
 			 * 팀에 회원 객체 등록
 			 */
+			uliMembers.get(0).setTeam(namTeam);
+			uliMembers.get(0).setTeam(uliTeam);
 			uliMembers.stream().forEach(u -> {
 				uliTeam.addMember(u);
 			});
@@ -64,9 +66,13 @@ public class DataInit {
 			 */
 			uliMembers.stream().forEach(u -> {
 				products.stream().forEach(p -> {
+					// 주문
 					Order order = new Order(new Address(u.getUserName() + "city", u.getUserName() + "street", "zipCode"), 1000);
 
+					// 주문에 물품 저장
 					order.setProduct(p);
+					
+					// 물품이 저장된 주문을 회원에 저장.
 					u.addOrder(order);
 				});
 				
