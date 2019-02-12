@@ -22,6 +22,7 @@ import domain.entity.Member;
 import domain.entity.Order;
 import domain.entity.item.Book;
 import domain.entity.item.abs.Item;
+import domain.entity.status.DeliveryStatus;
 import domain.entity.status.OrderStatus;
 import repository.OrderRepository;
 import service.OrderService;
@@ -45,7 +46,7 @@ public class OrderServiceTest {
 	
 	@Autowired OrderService orderService;
 	@Autowired OrderRepository orderRepository;
-
+	
 	@Test
 	public void 상품주문() throws Exception {
 		Member member = createMember();		
@@ -127,7 +128,7 @@ public class OrderServiceTest {
 		assertEquals("주문 취소시 상태는 CANCLE 이다.", OrderStatus.CANCEL, order.getStatus());
 		assertEquals("주문이 취소된 상품은 그만큼 재고가 증가해야 한다.", 10, item.getStockQuantity());
 	}
-	
+
 	@Test
 	public void 주문조회_ORDER() {
 		Member member = createMember();
@@ -205,6 +206,35 @@ public class OrderServiceTest {
 		assertEquals("주문 취소된 첫 번째 상품의 이름은 java8 이다."
 			, "java8"
 			, orders.get(0).getOrderItems().get(1).getItem().getName());
+	}
+	
+	@Test
+	public void 배송완료() {
+		Member member = createMember();		
+		Item item = createBook("시골 JPA", 10_000, 10);
+		int orderCnt = 2;
+		
+		Long orderId = orderService.order(member.getId(), item.getId(), orderCnt);
+
+		orderService.complete(orderId);
+		
+		Order order = orderRepository.findOne(orderId);
+
+		assertEquals("배송이 완료 상태가 되어야 한다.", DeliveryStatus.COMP, order.getDelivery().getStatus());	
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void 배송완료_취소불가능() throws RuntimeException {
+		Member member = createMember();
+		Item item = createBook("시골 JPA", 10_000, 10);
+		int orderCnt = 2;
+		
+		Long orderId = orderService.order(member.getId(), item.getId(), orderCnt);
+
+		orderService.complete(orderId);
+		orderService.cancelOrder(orderId);
+
+		fail("배송이 완료된 건은 취소가 되면 안된다.");	
 	}
 	
 	private Member createMember() {

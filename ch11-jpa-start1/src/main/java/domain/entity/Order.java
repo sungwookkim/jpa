@@ -111,16 +111,24 @@ public class Order {
 	
 	public void cancle() {
 		Optional.ofNullable(delivery.getStatus())
-			.filter(s -> s == DeliveryStatus.COMP)
-			.ifPresent(s -> {
+			.filter(s -> s == DeliveryStatus.READY)
+			.map(s -> {
+				this.setStatus(OrderStatus.CANCEL);
+				return s;
+			})
+			.orElseThrow(() -> {
 				throw new RuntimeException("이미 배송완료된 상품은 취소가 불가능합니다.");
 			});
-		
-		this.setStatus(OrderStatus.CANCEL);
 
 		orderItems.stream().forEach(o -> {
 			o.cancle();
 		});
+	}
+	
+	public void complete() {
+		Optional.ofNullable(this.status)
+			.filter(s -> s == OrderStatus.ORDER)
+			.ifPresent(s -> delivery.setStatus(DeliveryStatus.COMP));
 	}
 	
 	public int getTotalPrice() {

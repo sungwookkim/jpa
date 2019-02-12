@@ -82,7 +82,13 @@ public class OrderService {
 		
 		order.cancle();
 	}
-	
+
+	public void complete(Long orderId) {
+		Order order = orderRepository.findOne(orderId);
+
+		order.complete();
+	}
+
 	public List<Order> findOrders(OrderSearch orderSearch) {
 		return orderRepository.findAll(orderSearch);
 	}

@@ -82,12 +82,9 @@ public abstract class Item {
 	}
 	
 	public void removeStock(int quantity) {
-		Optional.ofNullable(this.stockQuantity - quantity)
+		this.stockQuantity = Optional.ofNullable(this.stockQuantity - quantity)
 			.filter(r -> r > 0)
-			.map(r -> {
-				this.stockQuantity = r;
-				return r;
-			})
+			.map(r -> r)
 			.orElseThrow(() -> {
 				throw new IllegalStateException("수량이 부족합니다.");
 			});

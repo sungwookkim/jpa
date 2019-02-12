@@ -36,4 +36,21 @@ public class ItemServiceTest {
 
 		assertEquals(book.getId(), itemService.findItem(saveId).getId());
 	}
+	
+	@Test
+	public void 상품수정() {
+		Item book = new Book("jpa", 100, 9000, "sinnake", "isbn");
+		
+		Long saveId = itemService.saveItem(book);
+		
+		book.setPrice(10_000);
+		book.setStockQuantity(10);
+
+		saveId = itemService.saveItem(book);
+		
+		Item getItem = itemService.findItem(saveId);
+				
+		assertEquals("금액이 9,000원에서 10,000원으로 변경되어야 한다.", 10_000, getItem.getPrice());
+		assertEquals("수량이 100개에서 10개로 변경되어야 한다.", 10, getItem.getStockQuantity());
+	}
 }
