@@ -7,7 +7,7 @@ import jpabook.start.DataInit;
 import jpabook.start.entity.Order;
 import jpabook.start.entity.item.mapping.Item;
 
-public class JQPL_NameGraph extends DataInit {
+public class JQPL_NameGraphMain extends DataInit {
 
 	public static void main(String[] args) {
 		initSave();

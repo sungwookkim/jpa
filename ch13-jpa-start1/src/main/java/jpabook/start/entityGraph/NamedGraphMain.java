@@ -12,7 +12,7 @@ import jpabook.start.DataInit;
 import jpabook.start.entity.Order;
 import jpabook.start.entity.item.mapping.Item;
 
-public class NamedGraph extends DataInit {
+public class NamedGraphMain extends DataInit {
 
 	public static void main(String[] args) {
 		initSave();

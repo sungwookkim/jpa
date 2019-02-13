@@ -14,7 +14,7 @@ import jpabook.start.entity.Order;
 import jpabook.start.entity.OrderItem;
 import jpabook.start.entity.item.mapping.Item;
 
-public class Dynamic_NamedGraph extends DataInit {
+public class Dynamic_NamedGraphMain extends DataInit {
 
 	public static void main(String[] args) {
 		initSave();
