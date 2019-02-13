@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.1">
+	<named-query name="xml.CH14_MEMBER.findByUserName">
+		<query><![CDATA[
+			SELECT m
+			FROM CH14_MEMBER m
+			WHERE m.name = :userName
+		]]></query>
+	</named-query>
+	
+	<named-query name="xml.CH14_MEMBER.count">
+		<query><![CDATA[
+			SELECT COUNT(m)
+			FROM CH14_MEMBER m
+		]]></query>
+	</named-query>
+</entity-mappings>
