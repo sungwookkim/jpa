@@ -1,0 +1,19 @@
+@Entity
+@Table
+다양한 매핑 사용
+데이터베이스 스키마 자동 생성
+DDL 생성 기능
+기본 키 매핑
+	기본 키 직ㅈ버 할당 전략
+	IDENTITY 전략
+	SEQUENCE 전략
+	TABLE 전략
+	AUTO 전략
+	기본 키 매핑 정리
+필드와 컬럼 매핑 : 레퍼런스
+	@Column
+	@Enumerated
+	@Temporal
+	@Lob
+	@Transient
+	@Access

@@ -1,6 +1,8 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import javax.transaction.Transactional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ classes = {
 	, JpaConfig.class
 	, AppConfig.class
 })
-//@Transactional
+@Transactional
 public class MemberServiceTest {
 
 	@Autowired MemberService memberService;
